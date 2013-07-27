@@ -2,6 +2,7 @@
 #include "minunit.h"
 #include "Vector.h"
 #include "Plane.h"
+#include "Sphere.h"
 
 int tests_run = 0;
 
@@ -158,15 +159,31 @@ static char * test_pIntersects() {
 }
 
 static char * test_pIsInside() {
-
+	
     Plane p = makePlane(makeVector(1, 0, 0), 0);
-
+	
     mu_assert("test_pIsInside a",  pIsInside(p, makeVector(-1, 0, 0)));
     mu_assert("test_pIsInside b", !pIsInside(p, makeVector(1, 0, 0)));
-
+	
     return 0;
 }
 
+
+
+
+
+static char * test_sIntersect() {
+	
+    Sphere s = makeSphere(makeVector(0, 0, 0), 1);
+	
+	Ray hit  = makeRay(makeVector(2, 0, 0), makeVector(-1, 0, 0));
+	Ray miss = makeRay(makeVector(2, 0, 0), makeVector(1, 0, 0));
+	
+    mu_assert("sIntersect a", sIntersect(s,  hit).hitType != missed);
+    mu_assert("sIntersect b", sIntersect(s, miss).hitType == missed);
+	
+    return 0;
+}
 
 
 
@@ -187,6 +204,8 @@ static char * all_tests() {
 
     mu_run_test(test_pIntersects);
     mu_run_test(test_pIsInside);
+	
+	mu_run_test(test_sIntersect);
 
     return 0;
 }
