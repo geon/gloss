@@ -5,7 +5,7 @@ typedef struct {
     float red, green, blue;
 } Color;
 
-makeColor(float red, float green, float blue);
+Color makeColor(float red, float green, float blue);
 
 Color cAdd(Color a, Color b);
 Color cMul(Color a, Color b);

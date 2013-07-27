@@ -5,21 +5,21 @@
 #include "Material.h"
 
 typedef enum {
-    Missed,
-    Surface,
-    PerfectBlack,
-    Origin
+    missed,
+    surface,
+    perfectBlack,
+    origin
 } HitType;
 
 typedef struct {
 
     HitType hitType;
-    Vector point;
+    Vector position;
     float distance;
     Vector normal;
     Material* material;
 } Intersection;
 
-Intersection makeIntersection(HitType hitType, Vector point, float distance, Vector normal , Material* material);
+Intersection makeIntersection(HitType hitType, Vector position, float distance, Vector normal , Material* material);
 
 #endif // INTERSECTION_H

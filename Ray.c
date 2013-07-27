@@ -1,4 +1,4 @@
-#include "Vector.h"
+#include "Ray.h"
 
 Ray makeRay(Vector origin, Vector direction) {
 

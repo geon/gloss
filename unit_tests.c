@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "minunit.h"
 #include "Vector.h"
+#include "Plane.h"
 
 int tests_run = 0;
 
@@ -141,7 +142,36 @@ static char * test_vReflected() {
     return 0;
 }
 
+
+
+
+
+static char * test_pIntersects() {
+
+    Plane p = makePlane(makeVector(1, 0, 0), 0);
+
+    mu_assert("test_pIntersects a", pIntersect(p, makeRay(makeVector( 1, 0, 0), makeVector(-1, 0, 0))).hitType != missed);
+    mu_assert("test_pIntersects a", pIntersect(p, makeRay(makeVector( 1, 0, 0), makeVector( 1, 0, 0))).hitType == missed);
+    mu_assert("test_pIntersects a", pIntersect(p, makeRay(makeVector(-1, 0, 0), makeVector(-1, 0, 0))).hitType == missed);
+
+    return 0;
+}
+
+static char * test_pIsInside() {
+
+    Plane p = makePlane(makeVector(1, 0, 0), 0);
+
+    mu_assert("test_pIsInside a",  pIsInside(p, makeVector(-1, 0, 0)));
+    mu_assert("test_pIsInside b", !pIsInside(p, makeVector(1, 0, 0)));
+
+    return 0;
+}
+
+
+
+
 static char * all_tests() {
+
     mu_run_test(test_makeVector);
     mu_run_test(test_vEqual);
     mu_run_test(test_vAdd);
@@ -154,6 +184,10 @@ static char * all_tests() {
     mu_run_test(test_vNormalized);
     // mu_run_test(test_vRotated);
     mu_run_test(test_vReflected);
+
+    mu_run_test(test_pIntersects);
+    mu_run_test(test_pIsInside);
+
     return 0;
 }
 
