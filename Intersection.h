@@ -2,8 +2,7 @@
 #define INTERSECTION_H
 
 #include "Vector.h"
-
-// typedef struct Material;
+#include "Material.h"
 
 typedef enum {
     Missed,
@@ -15,12 +14,12 @@ typedef enum {
 typedef struct {
 
     HitType hitType;
-    cVector point;
+    Vector point;
     float distance;
-    cVector normal;
-    // Material* material;
+    Vector normal;
+    Material* material;
 } Intersection;
 
-makeIntersection(HitType hitType, cVector point, float distance, cVector normal /*, Material* material */);
+Intersection makeIntersection(HitType hitType, Vector point, float distance, Vector normal , Material* material);
 
 #endif // INTERSECTION_H
