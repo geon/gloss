@@ -3,6 +3,7 @@
 #include "Vector.h"
 #include "Plane.h"
 #include "Sphere.h"
+#include "pi.h"
 
 int tests_run = 0;
 
@@ -117,18 +118,18 @@ static char * test_vNormalized() {
 	return 0;
 }
 
-// static char * test_vRotated() {
+static char * test_vRotated() {
 
-//	 Vector x = makeVector(1, 0, 0);
-//	 Vector y = makeVector(0, 1, 0);
-//	 Vector z = makeVector(0, 0, 1);
+	Vector x = makeVector(1, 0, 0);
+	Vector y = makeVector(0, 1, 0);
+	Vector z = makeVector(0, 0, 1);
 
-//	 Vector r = vRotated(x, y, PI/2);
+	Vector r = vRotated(x, y, -PI/2);
 
-//	 mu_assert("vNormalized", vEqual(r, z));
+	mu_assert("vRotated", vEqual(r, z));
 
-//	 return 0;
-// }
+	return 0;
+}
 
 static char * test_vReflected() {
 
@@ -138,7 +139,7 @@ static char * test_vReflected() {
 
 	Vector r = vReflected(v1, n);
 
-	mu_assert("test_vReflected", vEqual(r, v2));
+	mu_assert("vReflected", vEqual(r, v2));
 
 	return 0;
 }
@@ -151,9 +152,14 @@ static char * test_pIntersects() {
 
 	Plane p = makePlane(makeVector(1, 0, 0), 0);
 
-	mu_assert("test_pIntersects a", pIntersect(p, makeRay(makeVector( 1, 0, 0), makeVector(-1, 0, 0))).hitType != missed);
-	mu_assert("test_pIntersects a", pIntersect(p, makeRay(makeVector( 1, 0, 0), makeVector( 1, 0, 0))).hitType == missed);
-	mu_assert("test_pIntersects a", pIntersect(p, makeRay(makeVector(-1, 0, 0), makeVector(-1, 0, 0))).hitType == missed);
+	mu_assert("pIntersect a", pIntersect(p, makeRay(makeVector( 1, 0, 0), makeVector(-1, 0, 0))).hitType != missed);
+	mu_assert("pIntersect b", pIntersect(p, makeRay(makeVector( 1, 0, 0), makeVector( 1, 0, 0))).hitType == missed);
+	mu_assert("pIntersect c", pIntersect(p, makeRay(makeVector(-1, 0, 0), makeVector(-1, 0, 0))).hitType == missed);
+
+	Plane p2 = makePlane(makeVector(0, 1, 0), 0);
+
+	mu_assert("pIntersect d", pIntersect(p2, makeRay(makeVector(0, 1, 0), vNormalized(makeVector(-1, -0.0001, 0)))).hitType != missed);
+	mu_assert("pIntersect e", pIntersect(p2, makeRay(makeVector(0, 1, 0), vNormalized(makeVector(-1,  0.0001, 0)))).hitType == missed);
 
 	return 0;
 }
@@ -162,8 +168,8 @@ static char * test_pIsInside() {
 	
 	Plane p = makePlane(makeVector(1, 0, 0), 0);
 	
-	mu_assert("test_pIsInside a",  pIsInside(p, makeVector(-1, 0, 0)));
-	mu_assert("test_pIsInside b", !pIsInside(p, makeVector(1, 0, 0)));
+	mu_assert("pIsInside a",  pIsInside(p, makeVector(-1, 0, 0)));
+	mu_assert("pIsInside b", !pIsInside(p, makeVector( 1, 0, 0)));
 	
 	return 0;
 }
@@ -175,12 +181,12 @@ static char * test_pIsInside() {
 static char * test_sIntersect() {
 	
 	Sphere s = makeSphere(makeVector(0, 0, 0), 1);
+
+	mu_assert("sIntersect a", sIntersect(s, makeRay(makeVector(2, 0, 0), makeVector(-1, 0, 0))).hitType != missed);
+	mu_assert("sIntersect b", sIntersect(s, makeRay(makeVector(2, 0, 0), makeVector( 1, 0, 0))).hitType == missed);
 	
-	Ray hit  = makeRay(makeVector(2, 0, 0), makeVector(-1, 0, 0));
-	Ray miss = makeRay(makeVector(2, 0, 0), makeVector(1, 0, 0));
-	
-	mu_assert("sIntersect a", sIntersect(s,  hit).hitType != missed);
-	mu_assert("sIntersect b", sIntersect(s, miss).hitType == missed);
+	mu_assert("sIntersect c", sIntersect(s, makeRay(makeVector(2, 1, 0), vNormalized(makeVector(-1, -0.0001, 0)))).hitType != missed);
+	mu_assert("sIntersect d", sIntersect(s, makeRay(makeVector(2, 1, 0), vNormalized(makeVector(-1,  0.0001, 0)))).hitType == missed);
 	
 	return 0;
 }
@@ -199,7 +205,7 @@ static char * all_tests() {
 	mu_run_test(test_vCross);
 	mu_run_test(test_vLength);
 	mu_run_test(test_vNormalized);
-	// mu_run_test(test_vRotated);
+	mu_run_test(test_vRotated);
 	mu_run_test(test_vReflected);
 
 	mu_run_test(test_pIntersects);
