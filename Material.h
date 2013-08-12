@@ -9,9 +9,9 @@
 
 
 struct MaterialStruct {
-    Color reflectivity;
-    Color radience;
-    bool isPerfectBlack;
+	Color reflectivity;
+	Color radience;
+	bool isPerfectBlack;
 };
 
 Material makeMaterial(Color reflectivity, Color radience, bool isPerfectBlack);

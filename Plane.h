@@ -6,8 +6,8 @@
 #include "Ray.h"
 
 typedef struct {
-    Vector normal;
-    float distance;
+	Vector normal;
+	float distance;
 } Plane;
 
 Plane makePlane(Vector normal, float distance);

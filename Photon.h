@@ -5,8 +5,8 @@
 #include "Color.h"
 
 typedef struct {
-    Ray heading;
-    Color energy;
+	Ray heading;
+	Color energy;
 } Photon;
 
 Photon makePhoton(Ray heading, Color energy);

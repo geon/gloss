@@ -5,30 +5,30 @@
 
 Plane makePlane(Vector normal, float distance) {
 
-    return (Plane) {normal, distance};
+	return (Plane) {normal, distance};
 }
 
 Intersection pIntersect(const Plane plane, const Ray ray) {
 
-    Intersection intersection;
+	Intersection intersection;
 
-    float normalDotRayDirection = vDot(plane.normal, ray.direction);
-    if (normalDotRayDirection < 0 && !pIsInside(plane, ray.origin)){
+	float normalDotRayDirection = vDot(plane.normal, ray.direction);
+	if (normalDotRayDirection < 0 && !pIsInside(plane, ray.origin)){
 
-        intersection.hitType  = surface;
-        intersection.distance = (plane.distance - vDot(plane.normal, ray.origin)) / normalDotRayDirection;
-        intersection.position = vAdd(ray.origin, vsMul(ray.direction, intersection.distance));
-        intersection.normal   = plane.normal;
+		intersection.hitType  = surface;
+		intersection.distance = (plane.distance - vDot(plane.normal, ray.origin)) / normalDotRayDirection;
+		intersection.position = vAdd(ray.origin, vsMul(ray.direction, intersection.distance));
+		intersection.normal   = plane.normal;
 
-    } else {
+	} else {
 
-        intersection.hitType = missed;
-    }
+		intersection.hitType = missed;
+	}
 
-    return intersection;
+	return intersection;
 };
 
 bool pIsInside(const Plane plane, const Vector point) {
 
-    return vDot(point, plane.normal) < plane.distance;
+	return vDot(point, plane.normal) < plane.distance;
 };

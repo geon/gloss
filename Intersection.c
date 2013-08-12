@@ -4,9 +4,9 @@ Intersection makeIntersection(HitType hitType, Vector position, float distance, 
 
 	return (Intersection) {
 		hitType,
-	    position,
-	    distance,
-	    normal,
-	    material
-    };
+		position,
+		distance,
+		normal,
+		material
+	};
 }

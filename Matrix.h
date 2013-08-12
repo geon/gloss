@@ -5,7 +5,7 @@
 #include "Ray.h"
 
 typedef struct {
-    float values[4][4];
+	float values[4][4];
 } Matrix;
 
 Matrix makeMatrixZero();

@@ -25,7 +25,7 @@ void lowercaseType##ContainerDestroy(type##Container *container); \
 #define defineContainer(type, lowercaseType) \
 type##Container make##type##Container(const int capacity) { \
  \
-    return (type##Container) {malloc(sizeof(type) * capacity), 0, capacity}; \
+	return (type##Container) {malloc(sizeof(type) * capacity), 0, capacity}; \
 } \
 type * lowercaseType##ContainerAddValue(type##Container *container, const type value) { \
 	if (container->capacity > container->numValues) { \

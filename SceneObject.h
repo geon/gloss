@@ -9,14 +9,14 @@
 
 
 typedef struct {
-    const SceneObjectVTable *vTable;
-    const Material *material;
-    union {
-        Sphere sphere;
-        Plane plane;
-        // SceneObjectTransform transform;
-        // SceneObjectBox box;
-    };
+	const SceneObjectVTable *vTable;
+	const Material *material;
+	union {
+		Sphere sphere;
+		Plane plane;
+		// SceneObjectTransform transform;
+		// SceneObjectBox box;
+	};
 } SceneObject;
 
 

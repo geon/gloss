@@ -6,13 +6,13 @@
 #include "Ray.h"
 
 typedef struct {
-    Vector position;
-    float radius;
+	Vector position;
+	float radius;
 } Sphere;
 
 Sphere makeSphere(Vector position, float radius);
 
-Intersection sIntersect    (const Sphere sphere, const Ray ray);
+Intersection sIntersect	(const Sphere sphere, const Ray ray);
 Vector       sSampleSurface(const Sphere s);
 float        sSurfaceArea  (const Sphere s);
 

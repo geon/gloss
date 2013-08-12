@@ -8,8 +8,8 @@
 #include "Photon.h"
 
 struct SceneObjectVTableStruct {
-    Intersection (*intersectRay)(const SceneObject sceneObject, const Ray ray);
-    bool         (*emitPhotons) (const SceneObject sceneObject, const int numPhotons, PhotonContainer *photons);
+	Intersection (*intersectRay)(const SceneObject sceneObject, const Ray ray);
+	bool		 (*emitPhotons) (const SceneObject sceneObject, const int numPhotons, PhotonContainer *photons);
 };
 
 #endif // SCENEOBJECTVTABLE_H

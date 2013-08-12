@@ -14,10 +14,10 @@
 typedef struct {
 	SceneObjectContainer objects;
 	MaterialContainer materials;
-    PhotonEndPointContainer photons;
-    Matrix cameraOrientation;
-    Color skyColor;
-    float standardReflectivity;
+	PhotonEndPointContainer photons;
+	Matrix cameraOrientation;
+	Color skyColor;
+	float standardReflectivity;
 } Scene;
 
 

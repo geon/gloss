@@ -5,19 +5,19 @@
 #include "MaterialForwardDeclaration.h"
 
 typedef enum {
-    missed,
-    surface,
-    perfectBlack,
-    origin
+	missed,
+	surface,
+	perfectBlack,
+	origin
 } HitType;
 
 typedef struct {
 
-    HitType hitType;
-    Vector position;
-    float distance;
-    Vector normal;
-    const Material* material;
+	HitType hitType;
+	Vector position;
+	float distance;
+	Vector normal;
+	const Material* material;
 } Intersection;
 
 Intersection makeIntersection(HitType hitType, Vector position, float distance, Vector normal , Material* material);

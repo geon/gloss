@@ -2,7 +2,7 @@
 #define COLOR_H
 
 typedef struct {
-    float red, green, blue;
+	float red, green, blue;
 } Color;
 
 Color makeColorWhite();

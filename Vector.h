@@ -6,7 +6,7 @@
 extern const float vEpsilon;
 
 typedef struct {
-  float x, y, z;
+	float x, y, z;
 } Vector;
 
 Vector makeVector(float x, float y, float z);
