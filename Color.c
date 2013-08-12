@@ -1,9 +1,24 @@
 #include "Color.h"
-#include <cmath>
+#include <math.h>
 
+
+Color makeColorWhite() {
+	
+	return makeColorLightness(1);
+}
+
+Color makeColorBlack() {
+	
+	return makeColorLightness(0);
+}
+
+Color makeColorLightness(float l) {
+	
+    return (Color) {l, l, l};
+}
 
 Color makeColor(float red, float green, float blue) {
-
+	
     return (Color) {red, green, blue};
 }
 
@@ -22,6 +37,15 @@ Color cMul(Color a, Color b) {
         a.red   * b.red,
         a.green * b.green,
         a.blue  * b.blue
+    };
+}
+
+Color csMul(Color c, float s) {
+	
+    return (Color) {
+        c.red   * s,
+        c.green * s,
+        c.blue  * s
     };
 }
 

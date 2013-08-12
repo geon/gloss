@@ -5,8 +5,8 @@
 #include "Photon.h"
 
 typedef struct {
-    Intersection intersection;
     Photon photon;
+    Intersection intersection;
 } PhotonEndPoint;
 
 PhotonEndPoint makePhotonEndPoint(Photon photon, Intersection intersection);

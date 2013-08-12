@@ -1,6 +1,7 @@
 #include "Vector.h"
-//#include "Matrix.h"
+#include "Matrix.h"
 #include "randf.h"
+#include "pi.h"
 #include <math.h>
 
 const float vEpsilon = 1/10000.0;
@@ -8,6 +9,11 @@ const float vEpsilon = 1/10000.0;
 Vector makeVector(float x, float y, float z) {
 
     return (Vector) {x, y, z};
+}
+
+Vector makeVectorOrigo() {
+
+    return (Vector) {0, 0, 0};
 }
 
 bool vEqual(const Vector a, const Vector b) {
@@ -88,23 +94,32 @@ Vector vNormalized(const Vector v) {
     return vsDiv(v, vLength(v));
 }
 
-// Vector vRotated(const Vector v, const Vector axis, float amount) {
+Vector vNegated(const Vector v) {
 
-//     return vmMul(v, makeMatrixFromAxisAndRotation(axis, amount));
-// }
+    return (Vector) {
+        -v.x,
+        -v.y,
+        -v.z
+    };
+}
+
+Vector vRotated(const Vector v, const Vector axis, float angle) {
+
+	return mvMul(makeMatrixAxisAngle(axis, angle), v);
+}
 
 Vector vReflected(const Vector v, const Vector normal) {
 
     return vSub(v, vsMul(vsMul(normal, vDot(v, normal)), 2));
 }
 
-// Vector vSampleHemisphere(const Vector normal) {
+ Vector vSampleHemisphere(const Vector normal) {
 
-//     Vector tangent = vNormalized(vCross(normal, makeVector(randf(), randf(), randf())));
+     Vector tangent = vNormalized(vCross(normal, makeVector(randf(), randf(), randf())));
 
-//     return vRotated(
-//         vRotated(normal, tangent, acosf(sqrtf(randf()))),
-//         normal,
-//         randf() * 2*PI
-//     );
-// }
+     return vRotated(
+         vRotated(normal, tangent, acosf(sqrtf(randf()))),
+         normal,
+         randf() * 2*PI
+     );
+ }

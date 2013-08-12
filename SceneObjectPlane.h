@@ -1,11 +1,24 @@
 #ifndef SCENEOBJECTPLANE_H
 #define SCENEOBJECTPLANE_H
 
-extern const SceneObjectVTable sceneObjectPlaneVTable;
+#include "SceneObject.h"
+#include "Plane.h"
+#include "Material.h"
+#include "Intersection.h"
+#include "Ray.h"
+#include "Photon.h"
+#include "PhotonContainer.h"
+#include "SceneObjectVTableForwardDeclaration.h"
 
-SceneObject makeSceneObjectPlane (const SceneObjectPlane plane, const Material *material);
+
+SceneObject makeSceneObjectPlane(const Plane plane, const Material *material);
 
 Intersection sceneObjectPlaneIntersectRay(const SceneObject object, const Ray ray);
-bool sceneObjectPlaneEmitPhotons(const SceneObject object, const int numPhotons, Photon photons[]);
+bool sceneObjectPlaneEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons);
+
+extern const SceneObjectVTable sceneObjectPlaneVTable;
+
+
+#include "SceneObjectVTable.h"
 
 #endif // SCENEOBJECTPLANE_H

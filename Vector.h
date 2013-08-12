@@ -10,6 +10,7 @@ typedef struct {
 } Vector;
 
 Vector makeVector(float x, float y, float z);
+Vector makeVectorOrigo();
 
 bool vEqual(const Vector a, const Vector b);
 
@@ -24,11 +25,11 @@ Vector vCross(const Vector a, const Vector b);
 float  vLength       (const Vector v);
 float  vLengthSquared(const Vector v);
 Vector vNormalized   (const Vector v);
+Vector vNegated      (const Vector v);
 
-// Vector vRotated(const Vector v, const Vector axis, float amount);
-
+Vector vRotated(const Vector v, const Vector axis, float angle);
 Vector vReflected(const Vector v, const Vector normal);
-// Vector vSampleHemisphere(const Vector normal);
+Vector vSampleHemisphere(const Vector normal);
 
 
 #endif

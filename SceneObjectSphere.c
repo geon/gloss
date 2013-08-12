@@ -1,21 +1,22 @@
-#include "SceneObject.h"
 #include "SceneObjectSphere.h"
+#include "SceneObject.h"
+#include "SceneObjectVTableForwardDeclaration.h"
 
 const SceneObjectVTable sceneObjectSphereVTable = (SceneObjectVTable) {
 	&sceneObjectSphereIntersectRay,
-	&sceneObjectSphereEmitPhoton
+	&sceneObjectSphereEmitPhotons
 };
 
-SceneObject makeSceneObjectSphere (const SceneObjectSphere sphere, const Material *material) {
+SceneObject makeSceneObjectSphere (const Sphere sphere, const Material *material) {
 
-    return (SceneObject) {&sceneObjectSphereVTable, material, sphere};
+    return (SceneObject) {&sceneObjectSphereVTable, material,  {.sphere = sphere}};
 }
 
 Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray ray) {
 
-    cIntersection intersection = sIntersects(object.sphere, ray);
+    Intersection intersection = sIntersect(object.sphere, ray);
 
-    if (intersection.hitType && material->isPerfectBlack {
+    if (intersection.hitType && intersection.material->isPerfectBlack) {
 
         intersection.hitType = perfectBlack;
     }
@@ -25,7 +26,7 @@ Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray r
     return intersection;
 }
 
-bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons, Photon photons[]) {
+bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons) {
 
 	// TODO: Implement stratified sampling.
 

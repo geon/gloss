@@ -1,21 +1,23 @@
-#include "SceneObject.h"
 #include "SceneObjectPlane.h"
+#include "SceneObject.h"
+#include "SceneObjectVTable.h"
+#include "Material.h"
 
 const SceneObjectVTable sceneObjectPlaneVTable = (SceneObjectVTable) {
 	&sceneObjectPlaneIntersectRay,
-	&sceneObjectPlaneEmitPhoton
+	&sceneObjectPlaneEmitPhotons
 };
 
-SceneObject makeSceneObjectPlane (const SceneObjectPlane plane, const Material *material) {
-
-    return (SceneObject) {&sceneObjectPlaneVTable, material, plane};
+SceneObject makeSceneObjectPlane (const Plane plane, const Material *material) {
+	
+    return (SceneObject) {&sceneObjectPlaneVTable, material, {.plane = plane}};
 }
 
 Intersection sceneObjectPlaneIntersectRay(const SceneObject object, const Ray ray) {
 
-    cIntersection intersection = pIntersects(object.plane, ray);
+    Intersection intersection = pIntersect(object.plane, ray);
 
-    if (intersection.hitType && material->isPerfectBlack) {
+    if (intersection.hitType && intersection.material->isPerfectBlack) {
 
         intersection.hitType = perfectBlack;
     }
@@ -25,7 +27,7 @@ Intersection sceneObjectPlaneIntersectRay(const SceneObject object, const Ray ra
     return intersection;
 }
 
-bool sceneObjectPlaneEmitPhotons(const SceneObject object, const int numPhotons, Photon photons[]) {
+bool sceneObjectPlaneEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons) {
 
     // You can't really emit a finite number of photons from an infinite plane.
 

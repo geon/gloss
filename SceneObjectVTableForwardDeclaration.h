@@ -1,0 +1,7 @@
+#ifndef SCENEOBJECTVTABLEFORWARDDECLARATION_H
+#define SCENEOBJECTVTABLEFORWARDDECLARATION_H
+
+struct SceneObjectVTableStruct;
+typedef struct SceneObjectVTableStruct SceneObjectVTable;
+
+#endif // SCENEOBJECTVTABLEFORWARDDECLARATION_H
