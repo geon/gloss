@@ -105,7 +105,7 @@ Vector vNegated(const Vector v) {
 
 Vector vRotated(const Vector v, const Vector axis, float angle) {
 
-	return mvMul(makeMatrixAxisAngle(axis, angle), v);
+	return vAdd(vAdd(vsMul(v, cosf(angle)), vsMul(vCross(axis, v), sinf(angle))), vsMul(axis, vDot(axis, v) * (1-cosf(angle))));
 }
 
 Vector vReflected(const Vector v, const Vector normal) {
