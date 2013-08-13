@@ -6,9 +6,8 @@
 
 
 
-const int WIDTH = 255;
-const int HEIGHT = 255;
-const int numPasses = 10;
+const int WIDTH = 256;
+const int HEIGHT = 256;
 
 
 int main ( int argc, char** argv )
@@ -50,6 +49,7 @@ int main ( int argc, char** argv )
 
 	// program main loop
 	bool done = false;
+	int numPasses = 1;
 	while (!done)
 	{
 		// message processing loop
@@ -78,26 +78,25 @@ int main ( int argc, char** argv )
 		// DRAWING STARTS HERE
 		
 
-		for(int i=1; i<=numPasses; ++i){
-			for(int y=0; y<HEIGHT; ++y){
-				for(int x=0; x<WIDTH; ++x){
-					int currentPixel = x + y*WIDTH;
-					
-					pixels[currentPixel] = cAdd(pixels[currentPixel], sceneTraceRayAtPixel(&scene, x + y*WIDTH, WIDTH, HEIGHT, 3));
-					
-					unsigned int *ptr = (unsigned int*)screen->pixels;
-					int lineoffset = y * (screen->pitch / 4);
-					Color color = csMul(pixels[currentPixel], 1.0/i);
-					
-					ptr[lineoffset + x] = SDL_MapRGB(screen->format,
-													 linearFloatToGammaEncodedUint8(color.red  , 1.8),
-													 linearFloatToGammaEncodedUint8(color.green, 1.8),
-													 linearFloatToGammaEncodedUint8(color.blue , 1.8));
-				}
-
-				SDL_Flip(screen);
+		for(int y=0; y<HEIGHT; ++y){
+			for(int x=0; x<WIDTH; ++x){
+				int currentPixel = x + y*WIDTH;
+				
+				pixels[currentPixel] = cAdd(pixels[currentPixel], sceneTraceRayAtPixel(&scene, x + y*WIDTH, WIDTH, HEIGHT, 3));
+				
+				unsigned int *ptr = (unsigned int*)screen->pixels;
+				int lineoffset = y * (screen->pitch / 4);
+				Color color = csMul(pixels[currentPixel], 1.0/numPasses);
+				
+				ptr[lineoffset + x] = SDL_MapRGB(screen->format,
+												 linearFloatToGammaEncodedUint8(color.red  , 1.8),
+												 linearFloatToGammaEncodedUint8(color.green, 1.8),
+												 linearFloatToGammaEncodedUint8(color.blue , 1.8));
 			}
+			
+			SDL_Flip(screen);
 		}
+		++numPasses;
 		
 		// DRAWING ENDS HERE
 		
