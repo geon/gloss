@@ -33,6 +33,8 @@ Matrix makeMatrixTranslation(const Vector v) {
 
 Matrix makeMatrixAxisAngle(Vector axis, float angle) {
 
+	angle *= -1;
+	
 	float length = vLength(axis);
 	if(length < 0.0005){
 
@@ -59,9 +61,19 @@ Matrix makeMatrixAxisAngle(Vector axis, float angle) {
 	return matrix;
 }
 
+bool mEqual(const Matrix a, const Matrix b) {
+	
+	for (int i=0; i<4; i++)
+		for (int j=0; j<4; j++)
+			if (a.values[i][j] + vEpsilon < b.values[i][j] || b.values[i][j] + vEpsilon < a.values[i][j])
+				return false;
+			
+	return true;
+}
+
 Matrix mMul(const Matrix a, const Matrix b) {
 
-	Matrix matrix;
+	Matrix matrix = makeMatrixZero();
 
 	for (int i=0; i<4; i++)
 		for (int j=0; j<4; j++)
@@ -76,11 +88,10 @@ Vector mvMul(const Matrix matrix, const Vector vector) {
 	Vector newVector = mvMulDir(matrix, vector);
 
 	// Access x,y,z as an array.
-	float* vectorValues	= (float*)&vector.x;
 	float* newVectorValues = (float*)&newVector.x;
 
 	for (int i=0; i<3; i++)
-		newVectorValues[i] += matrix.values[3][i] * vectorValues[i];
+		newVectorValues[i] += matrix.values[i][3];
 
 	return newVector;
 }
@@ -95,7 +106,7 @@ Vector mvMulDir(const Matrix matrix, const Vector vector) {
 
 	for (int i=0; i<3; i++)
 		for (int j=0; j<3; j++)
-			newVectorValues[i] += vectorValues[j] * matrix.values[j][i];
+			newVectorValues[i] +=  matrix.values[i][j] * vectorValues[j];
 
 	return newVector;
 }

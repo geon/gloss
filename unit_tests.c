@@ -4,8 +4,73 @@
 #include "Plane.h"
 #include "Sphere.h"
 #include "pi.h"
+#include "Matrix.h"
+
 
 int tests_run = 0;
+
+
+
+
+static char * test_mEqual() {
+	
+	Matrix a = makeMatrixZero();
+	Matrix b = makeMatrixIdentity();
+	
+	mu_assert("mEqual a",  mEqual(a, a));
+	mu_assert("mEqual b", !mEqual(a, b));
+	
+	return 0;
+}
+
+static char * test_mMul() {
+	
+	Matrix a = makeMatrixTranslation(makeVector(1, 2, 3));
+	Matrix b = makeMatrixIdentity();
+	
+	mu_assert("mMul",  mEqual(a, mMul(b, a)));
+	
+	return 0;
+}
+
+static char * test_mvMul() {
+	
+	Vector v = makeVector(1, 2, 3);
+	Matrix m = makeMatrixTranslation(v);
+	
+	mu_assert("mvMul", vEqual(vsMul(v, 2), mvMul(m, v)));
+	
+	return 0;
+}
+
+static char * test_mvMulDir() {
+	
+	Vector v  = makeVector(1, 2, 3);
+	Matrix m1 = makeMatrixTranslation(v);
+	Matrix m2 = makeMatrixAxisAngle(makeVector(1, 0, 0), PI);
+	
+	mu_assert("mvMulDir a",  vEqual(v, mvMulDir(m1, v)));
+	mu_assert("mvMulDir b", !vEqual(v, mvMulDir(m2, v)));
+	mu_assert("mvMulDir c",  vEqual(makeVector(1, -2, -3), mvMulDir(m2, v)));
+	
+	return 0;
+}
+
+static char * test_mInversed() {
+	
+	Matrix m = mMul(
+		makeMatrixTranslation(makeVector(1, 2, 3)),
+		makeMatrixAxisAngle(makeVector(4, 5, 6), 7)
+	);
+	
+	mu_assert("mInversed",  mEqual(mMul(m, mInversed(m)), makeMatrixIdentity()));
+	
+	return 0;
+}
+
+
+
+
 
 static char * test_makeVector() {
 
@@ -124,9 +189,11 @@ static char * test_vRotated() {
 	Vector y = makeVector(0, 1, 0);
 	Vector z = makeVector(0, 0, 1);
 
-	Vector r = vRotated(x, y, -PI/2);
-
-	mu_assert("vRotated", vEqual(r, z));
+	Vector r1 = vRotated(x, y, -PI/2);
+	Vector r2 = mvMul(makeMatrixAxisAngle(y, -PI/2), x);
+	
+	mu_assert("vRotated a", vEqual(r1, z));
+	mu_assert("vRotated b", vEqual(r2, z));
 
 	return 0;
 }
@@ -193,7 +260,14 @@ static char * test_sIntersect() {
 
 
 
+
 static char * all_tests() {
+
+	mu_run_test(test_mEqual);
+	mu_run_test(test_mMul);
+	mu_run_test(test_mvMul);
+	mu_run_test(test_mvMulDir);
+	mu_run_test(test_mInversed);
 
 	mu_run_test(test_makeVector);
 	mu_run_test(test_vEqual);
@@ -212,6 +286,7 @@ static char * all_tests() {
 	mu_run_test(test_pIsInside);
 	
 	mu_run_test(test_sIntersect);
+	
 
 	return 0;
 }

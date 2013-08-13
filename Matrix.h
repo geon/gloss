@@ -13,6 +13,8 @@ Matrix makeMatrixIdentity();
 Matrix makeMatrixTranslation(Vector);
 Matrix makeMatrixAxisAngle(Vector axis, float angle);
 
+bool mEqual(const Matrix a, const Matrix b);
+
 Matrix mMul(const Matrix a, const Matrix b);
 
 Vector mvMul   (const Matrix Matrix, const Vector Vector);
