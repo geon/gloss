@@ -10,7 +10,7 @@ typedef struct {
 	float distance;
 } Plane;
 
-Plane makePlane(Vector normal, float distance);
+Plane makePlane(const Vector normal, const float distance);
 
 Intersection pIntersect(const Plane plane, const Ray ray);
 bool pIsInside(const Plane plane, const Vector point);

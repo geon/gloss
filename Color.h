@@ -7,13 +7,13 @@ typedef struct {
 
 Color makeColorWhite();
 Color makeColorBlack();
-Color makeColorLightness(float l);
-Color makeColor(float red, float green, float blue);
+Color makeColorLightness(const float l);
+Color makeColor(const float red, const float green, const float blue);
 
-Color  cAdd(Color a, Color b);
-Color  cMul(Color a, Color b);
-Color csMul(Color c, float s);
+Color  cAdd(const Color a, const Color b);
+Color  cMul(const Color a, const Color b);
+Color csMul(const Color c, const float s);
 
-unsigned char linearFloatToGammaEncodedUint8(float channel, float gamma);
+unsigned char linearFloatToGammaEncodedUint8(const float channel, const float gamma);
 
 #endif // COLOR_H

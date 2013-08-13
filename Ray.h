@@ -7,6 +7,6 @@ typedef struct {
 	Vector origin, direction;
 } Ray;
 
-Ray makeRay(Vector origin, Vector direction);
+Ray makeRay(const Vector origin, const Vector direction);
 
 #endif

@@ -9,6 +9,6 @@ typedef struct {
 	Intersection intersection;
 } PhotonEndPoint;
 
-PhotonEndPoint makePhotonEndPoint(Photon photon, Intersection intersection);
+PhotonEndPoint makePhotonEndPoint(const Photon photon, const Intersection intersection);
 
 #endif // PHOTONENDPOINT_H

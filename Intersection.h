@@ -20,7 +20,7 @@ typedef struct {
 	const Material* material;
 } Intersection;
 
-Intersection makeIntersection(HitType hitType, Vector position, float distance, Vector normal , Material* material);
+Intersection makeIntersection(const HitType hitType, const Vector position, const float distance, const Vector normal, const Material* material);
 
 #include "Material.h"
 

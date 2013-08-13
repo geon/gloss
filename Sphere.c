@@ -5,7 +5,7 @@
 #include "pi.h"
 
 
-Sphere makeSphere(Vector position, float radius) {
+Sphere makeSphere(const Vector position, const float radius) {
 
 	return (Sphere) {position, radius};
 }

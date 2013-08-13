@@ -1,6 +1,6 @@
 #include "Photon.h"
 
-Photon makePhoton(Ray heading, Color energy) {
+Photon makePhoton(const Ray heading, const Color energy) {
 
 	return (Photon) {heading, energy};
 }

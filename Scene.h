@@ -25,7 +25,7 @@ Scene makeScene();
 
 Color sceneTraceRayAtPixel(const Scene *scene, const int currentPixel, const int width, const int height, const int numCameraRayBounces);
 void sceneGeneratePhotons(Scene *scene, const int lightRayBounces, const int numPhotonsPerLightSource);
-Color sceneTraceRay(const Scene *scene, const Ray ray, int numCameraRayBounces);
+Color sceneTraceRay(const Scene *scene, const Ray ray, const int numCameraRayBounces);
 Intersection sceneIntersectRay(const Scene scene, const Ray ray);
 void buildCornellBox(Scene *scene);
 

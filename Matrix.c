@@ -31,9 +31,7 @@ Matrix makeMatrixTranslation(const Vector v) {
 	};
 }
 
-Matrix makeMatrixAxisAngle(Vector axis, float angle) {
-
-	angle *= -1;
+Matrix makeMatrixAxisAngle(const Vector axis, const float angle) {
 	
 	float length = vLength(axis);
 	if(length < 0.0005){
@@ -42,21 +40,21 @@ Matrix makeMatrixAxisAngle(Vector axis, float angle) {
 	}
 
 	// Normalizing, but reusing the length.
-	axis = vsDiv(axis, length);
+	Vector axisN = vsDiv(axis, length);
 
-	float Sin = sin(angle);
-	float Cos = cos(angle);
+	float Sin = sin(-angle);
+	float Cos = cos(-angle);
 
 	Matrix matrix = makeMatrixIdentity();
-	matrix.values[0][0] = Cos + axis.x*axis.x*(1-Cos);
-	matrix.values[1][0] = axis.x*axis.y*(1-Cos) - axis.z*Sin;
-	matrix.values[2][0] = axis.y*Sin + axis.x*axis.z*(1-Cos);
-	matrix.values[0][1] = axis.z*Sin + axis.x*axis.y*(1-Cos);
-	matrix.values[1][1] = Cos + axis.y*axis.y*(1-Cos);
-	matrix.values[2][1] = -axis.x*Sin + axis.y*axis.z*(1-Cos);
-	matrix.values[0][2] = -axis.y*Sin + axis.x*axis.z*(1-Cos);
-	matrix.values[1][2] = axis.x*Sin + axis.y*axis.z*(1-Cos);
-	matrix.values[2][2] = Cos + axis.z*axis.z*(1-Cos);
+	matrix.values[0][0] = Cos + axisN.x*axisN.x*(1-Cos);
+	matrix.values[1][0] = axisN.x*axisN.y*(1-Cos) - axisN.z*Sin;
+	matrix.values[2][0] = axisN.y*Sin + axisN.x*axisN.z*(1-Cos);
+	matrix.values[0][1] = axisN.z*Sin + axisN.x*axisN.y*(1-Cos);
+	matrix.values[1][1] = Cos + axisN.y*axisN.y*(1-Cos);
+	matrix.values[2][1] = -axisN.x*Sin + axisN.y*axisN.z*(1-Cos);
+	matrix.values[0][2] = -axisN.y*Sin + axisN.x*axisN.z*(1-Cos);
+	matrix.values[1][2] = axisN.x*Sin + axisN.y*axisN.z*(1-Cos);
+	matrix.values[2][2] = Cos + axisN.z*axisN.z*(1-Cos);
 
 	return matrix;
 }

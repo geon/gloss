@@ -3,7 +3,7 @@
 #include <math.h>
 
 
-Plane makePlane(Vector normal, float distance) {
+Plane makePlane(const Vector normal, const float distance) {
 
 	return (Plane) {normal, distance};
 }

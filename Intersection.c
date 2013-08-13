@@ -1,6 +1,6 @@
 #include "Intersection.h"
 
-Intersection makeIntersection(HitType hitType, Vector position, float distance, Vector normal, Material* material) {
+Intersection makeIntersection(const HitType hitType, const Vector position, const float distance, const Vector normal, const Material* material) {
 
 	return (Intersection) {
 		hitType,

@@ -6,7 +6,7 @@
 
 const float vEpsilon = 1/10000.0;
 
-Vector makeVector(float x, float y, float z) {
+Vector makeVector(const float x, const float y, const float z) {
 
 	return (Vector) {x, y, z};
 }
@@ -103,7 +103,7 @@ Vector vNegated(const Vector v) {
 	};
 }
 
-Vector vRotated(const Vector v, const Vector axis, float angle) {
+Vector vRotated(const Vector v, const Vector axis, const float angle) {
 
 	return vAdd(vAdd(vsMul(v, cosf(angle)), vsMul(vCross(axis, v), sinf(angle))), vsMul(axis, vDot(axis, v) * (1-cosf(angle))));
 }

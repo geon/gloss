@@ -10,7 +10,7 @@ typedef struct {
 	float radius;
 } Sphere;
 
-Sphere makeSphere(Vector position, float radius);
+Sphere makeSphere(const Vector position, const float radius);
 
 Intersection sIntersect	(const Sphere sphere, const Ray ray);
 Vector       sSampleSurface(const Sphere s);

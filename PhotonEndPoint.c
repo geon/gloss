@@ -1,6 +1,6 @@
 #include "PhotonEndPoint.h"
 
-PhotonEndPoint makePhotonEndPoint(Photon photon, Intersection intersection) {
+PhotonEndPoint makePhotonEndPoint(const Photon photon, const Intersection intersection) {
 
 	return (PhotonEndPoint) {photon, intersection};
 }

@@ -9,6 +9,6 @@ typedef struct {
 	Color energy;
 } Photon;
 
-Photon makePhoton(Ray heading, Color energy);
+Photon makePhoton(const Ray heading, const Color energy);
 
 #endif // PHOTON_H

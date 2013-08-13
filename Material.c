@@ -1,6 +1,6 @@
 #include "Material.h"
 
-Material makeMaterial(Color reflectivity, Color radience, bool isPerfectBlack) {
+Material makeMaterial(const Color reflectivity, const Color radience, const bool isPerfectBlack) {
 	
 	return (Material) {reflectivity, radience, isPerfectBlack};
 }

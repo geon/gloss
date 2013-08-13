@@ -10,8 +10,8 @@ typedef struct {
 
 Matrix makeMatrixZero();
 Matrix makeMatrixIdentity();
-Matrix makeMatrixTranslation(Vector);
-Matrix makeMatrixAxisAngle(Vector axis, float angle);
+Matrix makeMatrixTranslation(const Vector v);
+Matrix makeMatrixAxisAngle(const Vector axis, const float angle);
 
 bool mEqual(const Matrix a, const Matrix b);
 
