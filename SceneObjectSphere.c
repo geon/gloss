@@ -1,24 +1,27 @@
 #include "SceneObjectSphere.h"
-#include "SceneObject.h"
-#include "SceneObjectVTableForwardDeclaration.h"
 
 const SceneObjectVTable sceneObjectSphereVTable = (SceneObjectVTable) {
 	&sceneObjectSphereIntersectRay,
 	&sceneObjectSphereEmitPhotons
 };
 
-SceneObject makeSceneObjectSphere (const Sphere sphere, const Material *material) {
+SceneObject makeSceneObjectSphere (const Sphere sphere, const Matrix transform, const Material *material) {
 
-	return (SceneObject) {&sceneObjectSphereVTable, material,  {.sphere = sphere}};
+	return (SceneObject) {&sceneObjectSphereVTable, material, transform, mInversed(transform),  {.sphere = sphere}};
 }
 
 Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray ray) {
 
-	Intersection intersection = sIntersect(object.sphere, ray);
+	Intersection intersection = sIntersect(object.sphere, mrMul(object.inversedTransform, ray));
 
-	if (intersection.hitType && intersection.material->isPerfectBlack) {
-
-		intersection.hitType = perfectBlack;
+	if (intersection.hitType) {
+		
+		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
+		intersection.position = mvMul   (object.transform, intersection.position);
+		
+		if (intersection.material->isPerfectBlack) {
+			intersection.hitType = perfectBlack;
+		}
 	}
 
 	intersection.material = object.material;

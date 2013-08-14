@@ -3,6 +3,7 @@
 
 #include "SceneObjectVTableForwardDeclaration.h"
 #include "Material.h"
+#include "Matrix.h"
 #include "Sphere.h"
 #include "Plane.h"
 #include "PhotonContainer.h"
@@ -11,10 +12,11 @@
 typedef struct {
 	const SceneObjectVTable *vTable;
 	const Material *material;
+	Matrix transform;
+	Matrix inversedTransform;
 	union {
 		Sphere sphere;
 		Plane plane;
-		// SceneObjectTransform transform;
 		// SceneObjectBox box;
 	};
 } SceneObject;

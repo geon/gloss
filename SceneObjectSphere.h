@@ -11,7 +11,7 @@
 #include "SceneObjectVTableForwardDeclaration.h"
 
 
-SceneObject makeSceneObjectSphere(const Sphere sphere, const Material *material);
+SceneObject makeSceneObjectSphere(const Sphere sphere, const Matrix transform, const Material *material);
 
 Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray ray);
 bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons);

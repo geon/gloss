@@ -1,29 +1,31 @@
 #include "SceneObjectPlane.h"
-#include "SceneObject.h"
-#include "SceneObjectVTable.h"
-#include "Material.h"
 
 const SceneObjectVTable sceneObjectPlaneVTable = (SceneObjectVTable) {
 	&sceneObjectPlaneIntersectRay,
 	&sceneObjectPlaneEmitPhotons
 };
 
-SceneObject makeSceneObjectPlane (const Plane plane, const Material *material) {
+SceneObject makeSceneObjectPlane (const Plane plane, const Matrix transform, const Material *material) {
 	
-	return (SceneObject) {&sceneObjectPlaneVTable, material, {.plane = plane}};
+	return (SceneObject) {&sceneObjectPlaneVTable, material, transform, mInversed(transform), {.plane = plane}};
 }
 
 Intersection sceneObjectPlaneIntersectRay(const SceneObject object, const Ray ray) {
 
-	Intersection intersection = pIntersect(object.plane, ray);
+	Intersection intersection = pIntersect(object.plane, mrMul(object.inversedTransform, ray));
 
-	if (intersection.hitType && intersection.material->isPerfectBlack) {
+	if (intersection.hitType) {
+		
+		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
+		intersection.position = mvMul   (object.transform, intersection.position);
 
-		intersection.hitType = perfectBlack;
+		if (intersection.material->isPerfectBlack) {
+			intersection.hitType = perfectBlack;
+		}
 	}
 
 	intersection.material = object.material;
-
+	
 	return intersection;
 }
 

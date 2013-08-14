@@ -173,18 +173,18 @@ void buildCornellBox(Scene *scene) {
 	// Camera	
 	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, -3.8));
 
-	materialContainerAddValue(&scene->materials, makeMaterial(csMul(makeColor(1, 1, 1), scene->standardReflectivity), makeColorBlack(), 0));
 	
-	Material *whiteMaterial; // = materialContainerAddValue(&scene->materials, makeMaterial(csMul(makeColor(1, 1, 1), scene->standardReflectivity), makeColorBlack(), false));
+	
+	Material *whiteMaterial = materialContainerAddValue(&scene->materials, makeMaterial(makeColorLightness(scene->standardReflectivity), makeColorBlack(), 0));
+	Material *lampMaterial  = materialContainerAddValue(&scene->materials, makeMaterial(makeColorBlack(), makeColorLightness(10), 1));
 	
 	
 	// Lights
 	scene->skyColor = makeColorBlack();
 	float lr = 0.2;
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(makeSphere(makeVector(0, 1-lr - 0.05, 0), .2), whiteMaterial));
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(makeSphere(makeVector(0, 1-lr - 0.05, 0), .2), makeMatrixIdentity(), lampMaterial));
 
 /*
-	
 	// Boxes
 	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectTransform(
 		makeSceneObjectBox(
@@ -200,46 +200,45 @@ void buildCornellBox(Scene *scene) {
 		),
 		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), -.3), makeMatrixTranslation(makeVector(.3, -.75, -.3)))
 	));
+*/
 
+	
+	
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(
+		makeSphere(makeVector(0, -1+.3, 0), .3),
+		makeMatrixIdentity(),
+		whiteMaterial
+	));
 
+	
+	
 	// Walls
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectTransform(
-		makeSceneObjectUnitPlane(
-			makePlane(makeVector(0, 1, 0), -1),
-			whiteMaterial
-		),
-		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3)))
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+		makePlane(makeVector(0, 1, 0), -1),
+		makeMatrixIdentity(),
+		whiteMaterial
 	));
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectTransform(
-		makeSceneObjectUnitPlane(
-			makePlane(makeVector(0, -1, 0), -1),
-			whiteMaterial
-		),
-		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3)))
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+		makePlane(makeVector(0, -1, 0), -1),
+		makeMatrixIdentity(),
+		whiteMaterial
 	));
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectTransform(
-		makeSceneObjectUnitPlane(
-			makePlane(makeVector(0, 0, 1), -1),
-			whiteMaterial
-		),
-		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3)))
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+		makePlane(makeVector(0, 0, 1), -1),
+		makeMatrixIdentity(),
+		whiteMaterial
 	));
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectTransform(
-		makeSceneObjectUnitPlane(
-			makePlane(makeVector(1, 0, 0), -1),
-			materialContainerAddValue(&scene->materials, makeMaterialPhong(csMul(makeColor(1, 0.5, 0.1), scene->standardReflectivity), 0, 100, true))
-		),
-		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3)))
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+		makePlane(makeVector(1, 0, 0), -1),
+		makeMatrixIdentity(),
+		materialContainerAddValue(&scene->materials, makeMaterial(csMul(makeColor(1, 0.5, 0.1), scene->standardReflectivity), makeColorBlack(), 0))
 	));
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectTransform(
-		makeSceneObjectUnitPlane(
-			makePlane(makeVector(-1, 0, 0), -1),
-			materialContainerAddValue(&scene->materials, makeMaterialPhong(csMul(makeColor(0.1, 0.3, 0.5), scene->standardReflectivity), 0, 100, true))
-		),
-		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3)))
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+		makePlane(makeVector(-1, 0, 0), -1),
+		makeMatrixIdentity(),
+		materialContainerAddValue(&scene->materials, makeMaterial(csMul(makeColor(0.1, 0.3, 0.5), scene->standardReflectivity), makeColorBlack(), 0))
 	));
  
- */
 }
 
 // void buildCornellBoxSpheres(Scene *scene) {

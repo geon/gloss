@@ -1,6 +1,4 @@
 #include "SceneObjectUnitPlane.h"
-#include "SceneObject.h"
-#include "SceneObjectVTable.h"
 #include "randf.h"
 #include <math.h>
 
@@ -9,14 +7,14 @@ const SceneObjectVTable sceneObjectUnitPlaneVTable = (SceneObjectVTable) {
 	&sceneObjectUnitPlaneEmitPhotons
 };
 
-SceneObject makeSceneObjectUnitPlane (const Plane plane, const Material *material) {
+SceneObject makeSceneObjectUnitPlane (const Plane plane, const Matrix transform, const Material *material) {
 
-	return (SceneObject) {&sceneObjectUnitPlaneVTable, material, {.plane = plane}};
+	return (SceneObject) {&sceneObjectUnitPlaneVTable, material, transform, mInversed(transform), {.plane = plane}};
 }
 
 Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject object, const Ray ray) {
 
-	Intersection intersection = pIntersect(object.plane, ray);
+	Intersection intersection = pIntersect(object.plane, mrMul(object.inversedTransform, ray));
 
 	if (
 		intersection.position.x < -1 || intersection.position.x > 1 ||
@@ -27,9 +25,14 @@ Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject object, const Ra
 		intersection.hitType = missed;
 	}
 
-	if (intersection.hitType && intersection.material->isPerfectBlack) {
-
-		intersection.hitType = perfectBlack;
+	if (intersection.hitType) {
+		
+		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
+		intersection.position = mvMul   (object.transform, intersection.position);
+		
+		if (intersection.material->isPerfectBlack) {
+			intersection.hitType = perfectBlack;
+		}
 	}
 
 	intersection.material = object.material;
