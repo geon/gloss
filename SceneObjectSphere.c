@@ -1,4 +1,7 @@
 #include "SceneObjectSphere.h"
+#include <math.h>
+#include "randf.h"
+#include "pi.h"
 
 const SceneObjectVTable sceneObjectSphereVTable = (SceneObjectVTable) {
 	&sceneObjectSphereIntersectRay,
@@ -30,11 +33,31 @@ Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray r
 }
 
 bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons) {
+	
+	int numPhotonsU = ceil(sqrt(numPhotons));
+	int numPhotonsV = sqrt(numPhotons);
+	
+	for (int iU = 0; iU < numPhotonsU; ++iU) {
+		
+		for (int iV = 0; iV < numPhotonsV; ++iV) {
+			
+			int currentPhoton = iU*numPhotonsV + iV;
+			
+			if (currentPhoton >= numPhotons) {
+				break;
+			}
+			
+			Vector normal = vRotated(
+				vRotated(makeVector(object.sphere.radius, 0, 0), makeVector(0, 1, 0), acosf(((iU + randf())/numPhotonsU * 2)-1)),
+				makeVector(1, 0, 0),
+				((iV + randf())/numPhotonsV * 2)-1 * 2*PI
+			);
+			
+			Vector position = vAdd(object.sphere.position, vsMul(normal, 1+vEpsilon));
 
-	// TODO: Implement stratified sampling.
+			photonContainerAddValue(photons, makePhoton(mrMul(object.transform, makeRay(position, normal)), csMul(object.material->radience, 1.0 / numPhotons)));
+		}
+	}
 
-	return false;
-
-	// cVector position = shape.sampleSurface();
-	// return cPhoton(cRay(position, position.Normalized().SampleHemisphere()), material->lightSourceIntensity() * (shape.surfaceArea()/numPhotons));
+	return true;
 }
