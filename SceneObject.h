@@ -6,6 +6,7 @@
 #include "Matrix.h"
 #include "Sphere.h"
 #include "Plane.h"
+#include "Box.h"
 #include "PhotonContainer.h"
 
 
@@ -17,7 +18,7 @@ typedef struct {
 	union {
 		Sphere sphere;
 		Plane plane;
-		// SceneObjectBox box;
+		Box box;
 	};
 } SceneObject;
 

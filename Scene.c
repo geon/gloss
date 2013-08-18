@@ -11,6 +11,7 @@
 #include <math.h>
 #include "SceneObjectSphere.h"
 #include "SceneObjectUnitPlane.h"
+#include "SceneObjectBox.h"
 #include "bool.h"
 
 
@@ -184,33 +185,19 @@ void buildCornellBox(Scene *scene) {
 	float lr = 0.2;
 	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(makeSphere(makeVector(0, 1-lr - 0.05, 0), .2), makeMatrixIdentity(), lampMaterial));
 
-/*
-	// Boxes
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectTransform(
-		makeSceneObjectBox(
-			makeVector(.3, .7, .3),
-			whiteMaterial
-		),
-		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3)))
-	));
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectTransform(
-		makeSceneObjectBox(
-			makeVector(.3, .3, .3),
-			whiteMaterial
-		),
-		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), -.3), makeMatrixTranslation(makeVector(.3, -.75, -.3)))
-	));
-*/
 
-	
-	
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(
-		makeSphere(makeVector(0, -1+.3, 0), .3),
-		makeMatrixIdentity(),
+	// Boxes
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectBox(
+		makeVector(.3, .7, .3),
+		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3))),
+		whiteMaterial
+	));
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectBox(
+		makeVector(.3, .3, .3),
+		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), -.3), makeMatrixTranslation(makeVector(.3, -.75, -.3))),
 		whiteMaterial
 	));
 
-	
 	
 	// Walls
 	
@@ -248,6 +235,14 @@ void buildCornellBox(Scene *scene) {
 }
 
 // void buildCornellBoxSpheres(Scene *scene) {
+
+
+//sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(
+//																	makeSphere(makeVector(0, -1+.3, 0), .3),
+//																	makeMatrixIdentity(),
+//																	whiteMaterial
+//																	));
+//
 
 //	 // Spheres
 //	 float r = 0.4;
