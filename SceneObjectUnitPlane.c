@@ -16,17 +16,21 @@ Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject object, const Ra
 
 	Intersection intersection = pIntersect(object.plane, mrMul(object.inversedTransform, ray));
 
-	if (
-		intersection.position.x < -1 || intersection.position.x > 1 ||
-		intersection.position.y < -1 || intersection.position.y > 1 ||
-		intersection.position.z < -1 || intersection.position.z > 1
-	) {
-
-		intersection.hitType = missed;
-	}
-
 	if (intersection.hitType) {
-		
+
+		// Intersection outside the unit cube should be ignored.
+		if (
+			intersection.position.x < -1 || intersection.position.x > 1 ||
+			intersection.position.y < -1 || intersection.position.y > 1 ||
+			intersection.position.z < -1 || intersection.position.z > 1
+		) {
+			
+			intersection.hitType = missed;
+			
+			// Return early.
+			return intersection;
+		}
+
 		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
 		intersection.position = mvMul   (object.transform, intersection.position);
 		intersection.material = object.material;
