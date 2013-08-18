@@ -21,13 +21,12 @@ Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray r
 		
 		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
 		intersection.position = mvMul   (object.transform, intersection.position);
+		intersection.material = object.material;
 		
 		if (intersection.material->isPerfectBlack) {
 			intersection.hitType = perfectBlack;
 		}
 	}
-
-	intersection.material = object.material;
 
 	return intersection;
 }
