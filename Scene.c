@@ -171,7 +171,7 @@ Intersection sceneIntersectRay(const Scene scene, const Ray ray) {
 void buildCornellBox(Scene *scene) {
 
 	// Camera	
-	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, -3.8));
+	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, 3.8));
 
 	
 	
@@ -213,28 +213,34 @@ void buildCornellBox(Scene *scene) {
 	
 	
 	// Walls
+	
+	// Floor
 	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
-		makePlane(makeVector(0, 1, 0), -1),
+		makePlane(makeVector(0, 1, 0), -1+vEpsilon),
 		makeMatrixIdentity(),
 		whiteMaterial
 	));
+	// Ceiling
 	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
-		makePlane(makeVector(0, -1, 0), -1),
+		makePlane(makeVector(0, -1, 0), -1+vEpsilon),
 		makeMatrixIdentity(),
 		whiteMaterial
 	));
+	// Middle
 	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
-		makePlane(makeVector(0, 0, 1), -1),
+		makePlane(makeVector(0, 0, -1), -1+vEpsilon),
 		makeMatrixIdentity(),
 		whiteMaterial
 	));
+	// Left
 	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
-		makePlane(makeVector(1, 0, 0), -1),
+		makePlane(makeVector(1, 0, 0), -1+vEpsilon),
 		makeMatrixIdentity(),
 		materialContainerAddValue(&scene->materials, makeMaterial(csMul(makeColor(1, 0.5, 0.1), scene->standardReflectivity), makeColorBlack(), 0))
 	));
+	// Right
 	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
-		makePlane(makeVector(-1, 0, 0), -1),
+		makePlane(makeVector(-1, 0, 0), -1+vEpsilon),
 		makeMatrixIdentity(),
 		materialContainerAddValue(&scene->materials, makeMaterial(csMul(makeColor(0.1, 0.3, 0.5), scene->standardReflectivity), makeColorBlack(), 0))
 	));
