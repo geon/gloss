@@ -52,7 +52,7 @@ void sceneGeneratePhotons(Scene *scene, const int lightRayBounces, const int num
 				for(int bounce=0; bounce<lightRayBounces; ++bounce){
 										
 					// Check if the photon hits anyting.
-					Intersection intersection = sceneObjectIntersectRay(*object, photon->heading);
+					Intersection intersection = sceneIntersectRay(*scene, photon->heading);
 					if(intersection.hitType != surface)
 						break;
 					
