@@ -44,7 +44,6 @@ int main ( int argc, char** argv )
 	buildCornellBox(&scene);
 //	buildCornellBoxBlocks(scene);
 
-	sceneGeneratePhotons(&scene, 3, 10);
 	
 
 	// program main loop
@@ -78,6 +77,7 @@ int main ( int argc, char** argv )
 		// DRAWING STARTS HERE
 		
 
+		sceneGeneratePhotons(&scene, 3, 10);
 		for(int y=0; y<HEIGHT; ++y){
 			for(int x=0; x<WIDTH; ++x){
 				int currentPixel = x + y*WIDTH;
