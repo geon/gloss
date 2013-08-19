@@ -1,4 +1,6 @@
 #include "Material.h"
+#include "randf.h"
+#include <math.h>
 
 Material makeMaterial(const Color reflectivity, const Color radience, const bool isPerfectBlack) {
 	
@@ -7,16 +9,15 @@ Material makeMaterial(const Color reflectivity, const Color radience, const bool
 
 Photon materialSampleBRDF(const Material *material, const Intersection intersection, const Photon incoming) {
 	
-	Photon outgoing;
+	// Difuse surface
 	
-	// TODO: Actually implement this.
-	
-	return outgoing;
+	return makePhoton(makeRay(vAdd(intersection.position, vsMul(intersection.normal, vEpsilon)), vSampleHemisphere(intersection.normal)), cMul(incoming.energy, material->reflectivity));
 }
 
 Color materialBRDF(const Material *material, const Intersection intersection, const Vector incoming, const Vector outgoing) {
 
-	// TODO: Actually implement this.
+	// Diffuse shading
 	
-	return makeColorLightness(0.8);
+	float surfaceIllumination = vDot(intersection.normal, incoming);
+	return csMul(material->reflectivity, fmax(0, surfaceIllumination));
 }
