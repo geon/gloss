@@ -17,7 +17,7 @@
 
 Scene makeScene () {
 
-	return (Scene) {makeSceneObjectContainer(10), makeMaterialContainer(10), makePhotonEndPointContainer(1000), makeMatrixIdentity(), makeColor(0.5, 0.7, 1), 0.5};
+	return (Scene) {makeSceneObjectContainer(10), makeMaterialContainer(10), makePhotonEndPointContainer(1000), makeMatrixIdentity(), makeColor(0.5, 0.7, 1), 0.8};
 }
 
 Color sceneTraceRayAtPixel(const Scene *scene, const int currentPixel, const int width, const int height, const int numCameraRayBounces) {
@@ -177,7 +177,7 @@ void buildCornellBox(Scene *scene) {
 	
 	
 	Material *whiteMaterial = materialContainerAddValue(&scene->materials, makeMaterial(makeColorLightness(scene->standardReflectivity), makeColorBlack(), 0));
-	Material *lampMaterial  = materialContainerAddValue(&scene->materials, makeMaterial(makeColorBlack(), makeColorLightness(10), 1));
+	Material *lampMaterial  = materialContainerAddValue(&scene->materials, makeMaterial(makeColorBlack(), makeColorLightness(7), 1));
 	
 	
 	// Lights
