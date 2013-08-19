@@ -17,7 +17,7 @@
 
 Scene makeScene () {
 
-	return (Scene) {makeSceneObjectContainer(10), makeMaterialContainer(10), makePhotonEndPointContainer(100), makeMatrixIdentity(), makeColor(0.5, 0.7, 1), 0.5};
+	return (Scene) {makeSceneObjectContainer(10), makeMaterialContainer(10), makePhotonEndPointContainer(1000), makeMatrixIdentity(), makeColor(0.5, 0.7, 1), 0.5};
 }
 
 Color sceneTraceRayAtPixel(const Scene *scene, const int currentPixel, const int width, const int height, const int numCameraRayBounces) {
