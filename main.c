@@ -48,35 +48,11 @@ int main ( int argc, char** argv )
 
 	// program main loop
 	bool done = false;
-	int numPasses = 1;
-	while (!done)
-	{
-		// message processing loop
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
-		{
-			// check for messages
-			switch (event.type)
-			{
-					// exit if the window is closed
-				case SDL_QUIT:
-					done = true;
-					break;
-					
-					// check for keypresses
-				case SDL_KEYDOWN:
-				{
-					// exit if ESCAPE is pressed
-					if (event.key.keysym.sym == SDLK_ESCAPE)
-						done = true;
-					break;
-				}
-			} // end switch
-		} // end of message processing
-		
-		// DRAWING STARTS HERE
-		
+	int numPasses = 0;
+	for (;;) {
 
+		++numPasses;
+		
 		sceneGeneratePhotons(&scene, 3, 10);
 		for(int y=0; y<HEIGHT; ++y){
 			for(int x=0; x<WIDTH; ++x){
@@ -94,13 +70,47 @@ int main ( int argc, char** argv )
 												 linearFloatToGammaEncodedUint8(color.blue , 1.8));
 			}
 			
+
+			
 			SDL_Flip(screen);
+
+			
+			// Message processing loop
+			SDL_Event event;
+			while (SDL_PollEvent(&event))
+			{
+				// Check for messages
+				switch (event.type)
+				{
+					// Exit if the window is closed
+					case SDL_QUIT: {
+						
+						done = true;
+						break;
+					}
+						
+					// Check for keypresses
+					case SDL_KEYDOWN: {
+						
+						// Exit if ESCAPE is pressed
+						if (event.key.keysym.sym == SDLK_ESCAPE)
+							done = true;
+						break;
+					}
+				}
+			}
+			
+			// Stop rendering more lines.
+			if (done) {
+				break;
+			}
 		}
-		++numPasses;
-		
-		// DRAWING ENDS HERE
-		
-	} // end main loop
+
+		// Stop rendering more passes.
+		if (done) {
+			break;
+		}
+	}
 	
 	
 	// all is well ;)
