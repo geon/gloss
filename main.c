@@ -54,6 +54,8 @@ int main ( int argc, char** argv )
 		++numPasses;
 		
 		sceneGeneratePhotons(&scene, 3, 10);
+		printf("Generated %i photons.\n", scene.photons.numValues);
+		
 		for(int y=0; y<HEIGHT; ++y){
 			for(int x=0; x<WIDTH; ++x){
 				int currentPixel = x + y*WIDTH;
