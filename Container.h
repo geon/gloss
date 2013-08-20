@@ -10,7 +10,7 @@
 	int capacity; \
 }
 
-#define containerForeach(type, itterator, container) for (type *itterator = container.values; itterator < container.values + container.numValues; ++itterator)
+#define containerForeach(type, iterator, container) for (type *iterator = container.values; iterator < container.values + container.numValues; ++iterator)
 
 
 #define declareContainer(type, lowercaseType) \
