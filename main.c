@@ -42,7 +42,7 @@ int main ( int argc, char** argv )
 
 	Scene scene = makeScene();
 	buildCornellBox(&scene);
-//	buildCornellBoxBlocks(scene);
+//	buildSpherePhotonSpawnTest(&scene);
 
 	
 

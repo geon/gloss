@@ -17,7 +17,7 @@
 
 Scene makeScene () {
 
-	return (Scene) {makeSceneObjectContainer(10), makeMaterialContainer(10), makePhotonEndPointContainer(1000), makeMatrixIdentity(), makeColor(0.5, 0.7, 1), 0.8};
+	return (Scene) {makeSceneObjectContainer(1000), makeMaterialContainer(10), makePhotonEndPointContainer(1000), makeMatrixIdentity(), makeColor(0.5, 0.7, 1), 0.8};
 }
 
 Color sceneTraceRayAtPixel(const Scene *scene, const int currentPixel, const int width, const int height, const int numCameraRayBounces) {
@@ -254,3 +254,37 @@ void buildCornellBox(Scene *scene) {
 //	 // scene.push_back(new cSceneObjectTransform(new cSphereSceneObject(cSphere(makeVector(0), r), new cPhongMaterial(Color(1, 1, 1)*.5, .3, 10)), cMatrix(1).Scaled(makeVector(1))*cMatrix(makeVector(.4, -1+r, .2))));
 // }
 
+
+
+void buildSpherePhotonSpawnTest(Scene *scene) {
+	
+	// Camera
+	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, 3.8));
+	
+	
+	
+	Material *whiteMaterial = materialContainerAddValue(&scene->materials, makeMaterial(makeColorLightness(0.01), makeColorBlack(), 0));
+	Material *lampMaterial  = materialContainerAddValue(&scene->materials, makeMaterial(makeColorBlack(), makeColorLightness(5), 1));
+	
+	
+	// Lights
+//	scene->skyColor = makeColorLightness(0.5);
+	SceneObject lamp = makeSceneObjectSphere(makeSphere(makeVectorOrigo(), 1), makeMatrixIdentity(), lampMaterial);
+	sceneObjectContainerAddValue(&scene->objects, lamp);
+	
+
+	int numPhotons = 300;
+	PhotonContainer photons = makePhotonContainer(numPhotons);
+	sceneObjectSphereEmitPhotons(lamp, numPhotons, &photons);
+	
+	containerForeach(Photon, photon, photons) {
+
+		sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(
+																			makeSphere(photon->heading.origin, .02),
+																			makeMatrixAxisAngle(vNormalized(makeVector(1,2,0)), 2),
+																			whiteMaterial
+																			));
+	}
+
+	
+}
