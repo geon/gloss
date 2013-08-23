@@ -21,7 +21,7 @@ typedef struct {
 } Scene;
 
 
-Scene makeScene();
+Scene makeScene(void);
 
 Color sceneTraceRayAtPixel(const Scene *scene, const int currentPixel, const int width, const int height, const int numCameraRayBounces);
 void sceneGeneratePhotons(Scene *scene, const int lightRayBounces, const int numPhotonsPerLightSource);

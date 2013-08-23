@@ -37,6 +37,7 @@ type * lowercaseType##ContainerAddValue(type##Container *container, const type v
 		assert(0); \
 	} \
 } \
+__attribute__((noreturn)) \
 void lowercaseType##ContainerAddValues(type##Container *container, const type##Container values) { \
 	/* TODO: Actually implement. */ \
 	assert(0); \

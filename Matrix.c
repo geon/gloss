@@ -1,38 +1,41 @@
 #include "Matrix.h"
 #include <math.h>
 
+__attribute__((const))
 Matrix makeMatrixZero() {
 
-	return (Matrix) {
-		0, 0, 0, 0,
-		0, 0, 0, 0,
-		0, 0, 0, 0,
-		0, 0, 0, 0
-	};
+	return (Matrix) {{
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}};
 }
 
+__attribute__((const))
 Matrix makeMatrixIdentity() {
 
-	return (Matrix) {
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
-	};
+	return (Matrix) {{
+		{1, 0, 0, 0},
+		{0, 1, 0, 0},
+		{0, 0, 1, 0},
+		{0, 0, 0, 1}
+	}};
 }
 
+__attribute__((const))
 Matrix makeMatrixTranslation(const Vector v) {
 
-	return (Matrix) {
-		1, 0, 0, v.x,
-		0, 1, 0, v.y,
-		0, 0, 1, v.z,
-		0, 0, 0, 1
-	};
+	return (Matrix) {{
+		{1, 0, 0, v.x},
+		{0, 1, 0, v.y},
+		{0, 0, 1, v.z},
+		{0, 0, 0, 1},
+	}};
 }
 
+__attribute__((const))
 Matrix makeMatrixAxisAngle(const Vector axis, const float angle) {
-	
 	float length = vLength(axis);
 	if(length < 0.0005){
 
@@ -59,29 +62,31 @@ Matrix makeMatrixAxisAngle(const Vector axis, const float angle) {
 	return matrix;
 }
 
+__attribute__((const))
 bool mEqual(const Matrix a, const Matrix b) {
-	
 	for (int i=0; i<4; i++)
 		for (int j=0; j<4; j++)
 			if (a.values[i][j] + vEpsilon < b.values[i][j] || b.values[i][j] + vEpsilon < a.values[i][j])
 				return false;
-			
+
 	return true;
 }
 
-Matrix mMul(const Matrix a, const Matrix b) {
+__attribute__((pure))
+Matrix mMul(const Matrix *a, const Matrix *b) {
 
 	Matrix matrix = makeMatrixZero();
 
 	for (int i=0; i<4; i++)
 		for (int j=0; j<4; j++)
 			for (int k=0; k<4; k++)
-				matrix.values[i][j] += a.values[i][k] * b.values[k][j];
+				matrix.values[i][j] += a->values[i][k] * b->values[k][j];
 
 	return matrix;
 }
 
-Vector mvMul(const Matrix matrix, const Vector vector) {
+__attribute__((pure))
+Vector mvMul(const Matrix *matrix, const Vector *vector) {
 
 	Vector newVector = mvMulDir(matrix, vector);
 
@@ -89,33 +94,37 @@ Vector mvMul(const Matrix matrix, const Vector vector) {
 	float* newVectorValues = (float*)&newVector.x;
 
 	for (int i=0; i<3; i++)
-		newVectorValues[i] += matrix.values[i][3];
+		newVectorValues[i] += matrix->values[i][3];
 
 	return newVector;
 }
 
-Vector mvMulDir(const Matrix matrix, const Vector vector) {
+__attribute__((pure))
+Vector mvMulDir(const Matrix *matrix, const Vector *vector) {
 
 	Vector newVector = makeVector(0, 0, 0);
 
 	// Access x,y,z as an array.
-	float* vectorValues	= (float*)&vector.x;
+	float* vectorValues	= (float*)&vector->x;
 	float* newVectorValues = (float*)&newVector.x;
 
 	for (int i=0; i<3; i++)
 		for (int j=0; j<3; j++)
-			newVectorValues[i] +=  matrix.values[i][j] * vectorValues[j];
+			newVectorValues[i] +=  matrix->values[i][j] * vectorValues[j];
 
 	return newVector;
 }
 
-Ray mrMul(const Matrix matrix, const Ray ray) {
+__attribute__((pure))
+Ray mrMul(const Matrix *matrix, const Ray *ray) {
 
-	return makeRay(mvMul(matrix, ray.origin), vNormalized(mvMulDir(matrix, ray.direction)));
+	return makeRay(mvMul(matrix, &ray->origin),
+			vNormalized(mvMulDir(matrix, &ray->direction)));
 }
 
-Matrix mInversed(const Matrix matrix) {
-	float* m = (float*)&matrix.values[0][0];
+__attribute__((pure))
+Matrix mInversed(const Matrix *matrix) {
+	float* m = (float*)&matrix->values[0][0];
 	Matrix returnValue;
 	float* out = &returnValue.values[0][0];
 
@@ -289,6 +298,3 @@ Matrix mInversed(const Matrix matrix) {
 
   return returnValue;
 }
-
-
-

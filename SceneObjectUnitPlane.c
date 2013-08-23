@@ -2,19 +2,20 @@
 #include "randf.h"
 #include <math.h>
 
-const SceneObjectVTable sceneObjectUnitPlaneVTable = (SceneObjectVTable) {
+const SceneObjectVTable sceneObjectUnitPlaneVTable = {
 	&sceneObjectUnitPlaneIntersectRay,
 	&sceneObjectUnitPlaneEmitPhotons
 };
 
 SceneObject makeSceneObjectUnitPlane (const Plane plane, const Matrix transform, const Material *material) {
 
-	return (SceneObject) {&sceneObjectUnitPlaneVTable, material, transform, mInversed(transform), {.plane = plane}};
+	return (SceneObject) {&sceneObjectUnitPlaneVTable, material, transform, mInversed(&transform), {.plane = plane}};
 }
 
 Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject object, const Ray ray) {
 
-	Intersection intersection = pIntersect(object.plane, mrMul(object.inversedTransform, ray));
+	Intersection intersection = pIntersect(object.plane,
+					mrMul(&object.inversedTransform, &ray));
 
 	if (intersection.hitType) {
 
@@ -31,8 +32,8 @@ Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject object, const Ra
 			return intersection;
 		}
 
-		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
-		intersection.position = mvMul   (object.transform, intersection.position);
+		intersection.normal   = mvMulDir(&object.transform, &intersection.normal  );
+		intersection.position = mvMul   (&object.transform, &intersection.position);
 		intersection.material = object.material;
 		
 		if (intersection.material->isPerfectBlack) {
