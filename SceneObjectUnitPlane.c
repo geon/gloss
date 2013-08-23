@@ -2,7 +2,7 @@
 #include "randf.h"
 #include <math.h>
 
-const SceneObjectVTable sceneObjectUnitPlaneVTable = (SceneObjectVTable) {
+const SceneObjectVTable sceneObjectUnitPlaneVTable = {
 	&sceneObjectUnitPlaneIntersectRay,
 	&sceneObjectUnitPlaneEmitPhotons
 };

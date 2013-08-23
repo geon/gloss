@@ -1,6 +1,6 @@
 #include "SceneObjectPlane.h"
 
-const SceneObjectVTable sceneObjectPlaneVTable = (SceneObjectVTable) {
+const SceneObjectVTable sceneObjectPlaneVTable = {
 	&sceneObjectPlaneIntersectRay,
 	&sceneObjectPlaneEmitPhotons
 };

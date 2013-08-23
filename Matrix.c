@@ -1,38 +1,41 @@
 #include "Matrix.h"
 #include <math.h>
 
+__attribute__((const))
 Matrix makeMatrixZero() {
 
-	return (Matrix) {
-		0, 0, 0, 0,
-		0, 0, 0, 0,
-		0, 0, 0, 0,
-		0, 0, 0, 0
-	};
+	return (Matrix) {{
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	}};
 }
 
+__attribute__((const))
 Matrix makeMatrixIdentity() {
 
-	return (Matrix) {
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
-	};
+	return (Matrix) {{
+		{1, 0, 0, 0},
+		{0, 1, 0, 0},
+		{0, 0, 1, 0},
+		{0, 0, 0, 1}
+	}};
 }
 
+__attribute__((const))
 Matrix makeMatrixTranslation(const Vector v) {
 
-	return (Matrix) {
-		1, 0, 0, v.x,
-		0, 1, 0, v.y,
-		0, 0, 1, v.z,
-		0, 0, 0, 1
-	};
+	return (Matrix) {{
+		{1, 0, 0, v.x},
+		{0, 1, 0, v.y},
+		{0, 0, 1, v.z},
+		{0, 0, 0, 1},
+	}};
 }
 
+__attribute__((const))
 Matrix makeMatrixAxisAngle(const Vector axis, const float angle) {
-	
 	float length = vLength(axis);
 	if(length < 0.0005){
 
@@ -59,16 +62,17 @@ Matrix makeMatrixAxisAngle(const Vector axis, const float angle) {
 	return matrix;
 }
 
+__attribute__((const))
 bool mEqual(const Matrix a, const Matrix b) {
-	
 	for (int i=0; i<4; i++)
 		for (int j=0; j<4; j++)
 			if (a.values[i][j] + vEpsilon < b.values[i][j] || b.values[i][j] + vEpsilon < a.values[i][j])
 				return false;
-			
+
 	return true;
 }
 
+__attribute__((const))
 Matrix mMul(const Matrix a, const Matrix b) {
 
 	Matrix matrix = makeMatrixZero();
@@ -81,6 +85,7 @@ Matrix mMul(const Matrix a, const Matrix b) {
 	return matrix;
 }
 
+__attribute__((const))
 Vector mvMul(const Matrix matrix, const Vector vector) {
 
 	Vector newVector = mvMulDir(matrix, vector);
@@ -94,6 +99,7 @@ Vector mvMul(const Matrix matrix, const Vector vector) {
 	return newVector;
 }
 
+__attribute__((const))
 Vector mvMulDir(const Matrix matrix, const Vector vector) {
 
 	Vector newVector = makeVector(0, 0, 0);
@@ -109,11 +115,13 @@ Vector mvMulDir(const Matrix matrix, const Vector vector) {
 	return newVector;
 }
 
+__attribute__((const))
 Ray mrMul(const Matrix matrix, const Ray ray) {
 
 	return makeRay(mvMul(matrix, ray.origin), vNormalized(mvMulDir(matrix, ray.direction)));
 }
 
+__attribute__((const))
 Matrix mInversed(const Matrix matrix) {
 	float* m = (float*)&matrix.values[0][0];
 	Matrix returnValue;
@@ -289,6 +297,3 @@ Matrix mInversed(const Matrix matrix) {
 
   return returnValue;
 }
-
-
-

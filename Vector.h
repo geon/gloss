@@ -10,7 +10,7 @@ typedef struct {
 } Vector;
 
 Vector makeVector(const float x, const float y, const float z);
-Vector makeVectorOrigo();
+Vector makeVectorOrigo(void);
 
 bool vEqual(const Vector a, const Vector b);
 

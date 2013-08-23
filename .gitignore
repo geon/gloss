@@ -1,2 +1,4 @@
 *.xcodeproj
 old
+gloss
+.*.d

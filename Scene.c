@@ -2,7 +2,7 @@
 #include "Matrix.h"
 #include "Color.h"
 #include "Intersection.h"
-#include "PhotonEndpoint.h"
+#include "PhotonEndPoint.h"
 #include "PhotonEndPointContainer.h"
 #include "PhotonContainer.h"
 #include "pi.h"
@@ -256,7 +256,8 @@ void buildCornellBox(Scene *scene) {
 
 
 
-void buildSpherePhotonSpawnTest(Scene *scene) {
+__attribute__((unused))
+static void buildSpherePhotonSpawnTest(Scene *scene) {
 	
 	// Camera
 	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, 3.8));
