@@ -11,17 +11,18 @@ const SceneObjectVTable sceneObjectSphereVTable = {
 
 SceneObject makeSceneObjectSphere (const Sphere sphere, const Matrix transform, const Material *material) {
 
-	return (SceneObject) {&sceneObjectSphereVTable, material, transform, mInversed(transform),  {.sphere = sphere}};
+	return (SceneObject) {&sceneObjectSphereVTable, material, transform, mInversed(&transform),  {.sphere = sphere}};
 }
 
 Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray ray) {
 
-	Intersection intersection = sIntersect(object.sphere, mrMul(object.inversedTransform, ray));
+	Intersection intersection = sIntersect(object.sphere,
+					mrMul(&object.inversedTransform, &ray));
 
 	if (intersection.hitType) {
 		
-		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
-		intersection.position = mvMul   (object.transform, intersection.position);
+		intersection.normal   = mvMulDir(&object.transform, &intersection.normal  );
+		intersection.position = mvMul   (&object.transform, &intersection.position);
 		intersection.material = object.material;
 		
 		if (intersection.material->isPerfectBlack) {
@@ -91,7 +92,10 @@ bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons
 			
 			Vector position = vAdd(object.sphere.position, vsMul(normal, 1+vEpsilon));
 
-			photonContainerAddValue(photons, makePhoton(mrMul(object.transform, makeRay(position, normal)), csMul(object.material->radience, 1.0 / numPhotons)));
+			Ray r = makeRay(position, normal);
+			photonContainerAddValue(photons,
+					makePhoton(mrMul(&object.transform, &r),
+					csMul(object.material->radience, 1.0 / numPhotons)));
 		}
 	}
 
@@ -108,7 +112,10 @@ bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons
 		
 		Vector position = vAdd(object.sphere.position, vsMul(normal, 1+vEpsilon));
 		
-		photonContainerAddValue(photons, makePhoton(mrMul(object.transform, makeRay(position, normal)), csMul(object.material->radience, 1.0 / numPhotons)));
+		Ray r = makeRay(position, normal);
+		photonContainerAddValue(photons,
+				makePhoton(mrMul(&object.transform, &r),
+				csMul(object.material->radience, 1.0 / numPhotons)));
 	}
 	
 	return true;

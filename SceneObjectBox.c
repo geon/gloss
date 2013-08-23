@@ -9,17 +9,18 @@ const SceneObjectVTable sceneObjectBoxVTable = {
 
 SceneObject makeSceneObjectBox (const Vector size, const Matrix transform, const Material *material) {
 
-	return (SceneObject) {&sceneObjectBoxVTable, material, transform, mInversed(transform), {.box = makeBox(size)}};
+	return (SceneObject) {&sceneObjectBoxVTable, material, transform, mInversed(&transform), {.box = makeBox(size)}};
 }
 
 Intersection sceneObjectBoxIntersectRay(const SceneObject object, const Ray ray) {
 
-	Intersection intersection = bIntersect(object.box, mrMul(object.inversedTransform, ray));
+	Intersection intersection = bIntersect(object.box,
+					mrMul(&object.inversedTransform, &ray));
 
 	if (intersection.hitType) {
 
-		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
-		intersection.position = mvMul   (object.transform, intersection.position);
+		intersection.normal   = mvMulDir(&object.transform, &intersection.normal  );
+		intersection.position = mvMul   (&object.transform, &intersection.position);
 		intersection.material = object.material;
 		
 		if (intersection.material->isPerfectBlack) {

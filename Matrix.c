@@ -72,21 +72,21 @@ bool mEqual(const Matrix a, const Matrix b) {
 	return true;
 }
 
-__attribute__((const))
-Matrix mMul(const Matrix a, const Matrix b) {
+__attribute__((pure))
+Matrix mMul(const Matrix *a, const Matrix *b) {
 
 	Matrix matrix = makeMatrixZero();
 
 	for (int i=0; i<4; i++)
 		for (int j=0; j<4; j++)
 			for (int k=0; k<4; k++)
-				matrix.values[i][j] += a.values[i][k] * b.values[k][j];
+				matrix.values[i][j] += a->values[i][k] * b->values[k][j];
 
 	return matrix;
 }
 
-__attribute__((const))
-Vector mvMul(const Matrix matrix, const Vector vector) {
+__attribute__((pure))
+Vector mvMul(const Matrix *matrix, const Vector *vector) {
 
 	Vector newVector = mvMulDir(matrix, vector);
 
@@ -94,36 +94,37 @@ Vector mvMul(const Matrix matrix, const Vector vector) {
 	float* newVectorValues = (float*)&newVector.x;
 
 	for (int i=0; i<3; i++)
-		newVectorValues[i] += matrix.values[i][3];
+		newVectorValues[i] += matrix->values[i][3];
 
 	return newVector;
 }
 
-__attribute__((const))
-Vector mvMulDir(const Matrix matrix, const Vector vector) {
+__attribute__((pure))
+Vector mvMulDir(const Matrix *matrix, const Vector *vector) {
 
 	Vector newVector = makeVector(0, 0, 0);
 
 	// Access x,y,z as an array.
-	float* vectorValues	= (float*)&vector.x;
+	float* vectorValues	= (float*)&vector->x;
 	float* newVectorValues = (float*)&newVector.x;
 
 	for (int i=0; i<3; i++)
 		for (int j=0; j<3; j++)
-			newVectorValues[i] +=  matrix.values[i][j] * vectorValues[j];
+			newVectorValues[i] +=  matrix->values[i][j] * vectorValues[j];
 
 	return newVector;
 }
 
-__attribute__((const))
-Ray mrMul(const Matrix matrix, const Ray ray) {
+__attribute__((pure))
+Ray mrMul(const Matrix *matrix, const Ray *ray) {
 
-	return makeRay(mvMul(matrix, ray.origin), vNormalized(mvMulDir(matrix, ray.direction)));
+	return makeRay(mvMul(matrix, &ray->origin),
+			vNormalized(mvMulDir(matrix, &ray->direction)));
 }
 
-__attribute__((const))
-Matrix mInversed(const Matrix matrix) {
-	float* m = (float*)&matrix.values[0][0];
+__attribute__((pure))
+Matrix mInversed(const Matrix *matrix) {
+	float* m = (float*)&matrix->values[0][0];
 	Matrix returnValue;
 	float* out = &returnValue.values[0][0];
 

@@ -28,8 +28,10 @@ Color sceneTraceRayAtPixel(const Scene *scene, const int currentPixel, const int
 	float maxX = tanf(cameraFov/360.0*PI);
 	float x =  ((((currentPixel % width) + randf()) / width ) * 2 - 1) * maxX;
 	float y = -((((currentPixel / width) + randf()) / height) * 2 - 1) * maxX / cameraAspectRatio;
+	Matrix m = mInversed(&scene->cameraOrientation);
+	Ray r = makeRay(makeVectorOrigo(), vNormalized(makeVector(x, y, 1)));
 
-	return sceneTraceRay(scene, mrMul(mInversed(scene->cameraOrientation), makeRay(makeVectorOrigo(), vNormalized(makeVector(x, y, 1)))), numCameraRayBounces);
+	return sceneTraceRay(scene, mrMul(&m, &r), numCameraRayBounces);
 }
 
 void sceneGeneratePhotons(Scene *scene, const int lightRayBounces, const int numPhotonsPerLightSource) {
@@ -187,14 +189,20 @@ void buildCornellBox(Scene *scene) {
 
 
 	// Boxes
+	Matrix a, b;
+	a = makeMatrixAxisAngle(makeVector(0, 1, 0), .3);
+	b = makeMatrixTranslation(makeVector(-.3, -.3, .3));
 	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectBox(
 		makeVector(.3, .7, .3),
-		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3))),
+		mMul(&a, &b),
 		whiteMaterial
 	));
+
+	a = makeMatrixAxisAngle(makeVector(0, 1, 0), -.3);
+	b = makeMatrixTranslation(makeVector(.3, -.75, -.3));
 	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectBox(
 		makeVector(.3, .3, .3),
-		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), -.3), makeMatrixTranslation(makeVector(.3, -.75, -.3))),
+		mMul(&a, &b),
 		whiteMaterial
 	));
 
