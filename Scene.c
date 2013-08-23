@@ -183,7 +183,7 @@ void buildCornellBox(Scene *scene) {
 	// Lights
 	scene->skyColor = makeColorBlack();
 	float lr = 0.2;
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(makeSphere(makeVector(0, 1-lr - 0.05, 0), .2), makeMatrixIdentity(), lampMaterial));
+	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(makeSphere(makeVector(0, 1-lr - 0.05, 0), lr), makeMatrixIdentity(), lampMaterial));
 
 
 	// Boxes
