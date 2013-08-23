@@ -2,7 +2,7 @@
 #include "randf.h"
 #include <math.h>
 
-const SceneObjectVTable sceneObjectBoxVTable = (SceneObjectVTable) {
+const SceneObjectVTable sceneObjectBoxVTable = {
 	&sceneObjectBoxIntersectRay,
 	&sceneObjectBoxEmitPhotons
 };

@@ -4,7 +4,7 @@
 #include "pi.h"
 #include <stdio.h>
 
-const SceneObjectVTable sceneObjectSphereVTable = (SceneObjectVTable) {
+const SceneObjectVTable sceneObjectSphereVTable = {
 	&sceneObjectSphereIntersectRay,
 	&sceneObjectSphereEmitPhotons
 };
