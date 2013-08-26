@@ -9,20 +9,22 @@ const SceneObjectVTable sceneObjectSphereVTable = (SceneObjectVTable) {
 	&sceneObjectSphereEmitPhotons
 };
 
-SceneObject makeSceneObjectSphere (const Sphere sphere, const Matrix transform, const Material *material) {
+SceneObjectSphere makeSceneObjectSphere (const Sphere sphere, const Material *material) {
 
-	return (SceneObject) {&sceneObjectSphereVTable, material, transform, mInversed(transform),  {.sphere = sphere}};
+	return (SceneObjectSphere) {makeSceneObject(&sceneObjectSphereVTable), sphere, material};
 }
 
-Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray ray) {
+defineAllocator(SceneObjectSphere)
 
-	Intersection intersection = sIntersect(object.sphere, mrMul(object.inversedTransform, ray));
+Intersection sceneObjectSphereIntersectRay(const SceneObject *superobject, const Ray ray) {
+
+	const SceneObjectSphere *object = (SceneObjectSphere *) superobject;
+
+	Intersection intersection = sIntersect(object->sphere, ray);
 
 	if (intersection.hitType) {
 		
-		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
-		intersection.position = mvMul   (object.transform, intersection.position);
-		intersection.material = object.material;
+		intersection.material = object->material;
 		
 		if (intersection.material->isPerfectBlack) {
 			intersection.hitType = perfectBlack;
@@ -32,8 +34,9 @@ Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray r
 	return intersection;
 }
 
-bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons) {
+bool sceneObjectSphereEmitPhotons(const SceneObject *superobject, const int numPhotons, PhotonContainer *photons) {
 	
+	const SceneObjectSphere *object = (SceneObjectSphere *) superobject;
 	
 	/*
 
@@ -84,14 +87,14 @@ bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons
 			float v = (iV + randf()) / numPhotonsV * (1-lastRowFactor);
 			
 			Vector normal = vRotated(
-				vRotated(makeVector(object.sphere.radius, 0, 0), makeVector(0, 1, 0), acosf(v*2 - 1)),
+				vRotated(makeVector(object->sphere.radius, 0, 0), makeVector(0, 1, 0), acosf(v*2 - 1)),
 				makeVector(1, 0, 0),
 				u * 2*PI
 			);
 			
-			Vector position = vAdd(object.sphere.position, vsMul(normal, 1+vEpsilon));
+			Vector position = vAdd(object->sphere.position, vsMul(normal, 1+vEpsilon));
 
-			photonContainerAddValue(photons, makePhoton(mrMul(object.transform, makeRay(position, normal)), csMul(object.material->radience, 1.0 / numPhotons)));
+			photonContainerAddValue(photons, makePhoton(makeRay(position, normal), csMul(object->material->radience, 1.0 / numPhotons)));
 		}
 	}
 
@@ -101,14 +104,14 @@ bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons
 		float v = (1 - lastRowFactor) + randf() * lastRowFactor;
 		
 		Vector normal = vRotated(
-			vRotated(makeVector(object.sphere.radius, 0, 0), makeVector(0, 1, 0), acosf(v*2 - 1)),
+			vRotated(makeVector(object->sphere.radius, 0, 0), makeVector(0, 1, 0), acosf(v*2 - 1)),
 			makeVector(1, 0, 0),
 			u * 2*PI
 		);
 		
-		Vector position = vAdd(object.sphere.position, vsMul(normal, 1+vEpsilon));
+		Vector position = vAdd(object->sphere.position, vsMul(normal, 1+vEpsilon));
 		
-		photonContainerAddValue(photons, makePhoton(mrMul(object.transform, makeRay(position, normal)), csMul(object.material->radience, 1.0 / numPhotons)));
+		photonContainerAddValue(photons, makePhoton(makeRay(position, normal), csMul(object->material->radience, 1.0 / numPhotons)));
 	}
 	
 	return true;

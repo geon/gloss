@@ -8,17 +8,22 @@
 #include "Ray.h"
 #include "Photon.h"
 #include "PhotonContainer.h"
-#include "SceneObjectVTableForwardDeclaration.h"
+#include "SceneObjectPointerContainer.h"
 
 
-SceneObject makeSceneObjectPlane (const Plane plane, const Matrix transform, const Material *material);
+typedef struct {
+	const SceneObject parent;
+	Plane plane;
+	const Material *material;
+} SceneObjectPlane;
 
-Intersection sceneObjectPlaneIntersectRay(const SceneObject object, const Ray ray);
-bool sceneObjectPlaneEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons);
+
+SceneObjectPlane makeSceneObjectPlane(const Plane plane, const Material *material);
+
+Intersection sceneObjectPlaneIntersectRay(const SceneObject *object, const Ray ray);
+bool sceneObjectPlaneEmitPhotons(const SceneObject *object, const int numPhotons, PhotonContainer *photons);
 
 extern const SceneObjectVTable sceneObjectPlaneVTable;
 
-
-#include "SceneObjectVTable.h"
 
 #endif // SCENEOBJECTPLANE_H

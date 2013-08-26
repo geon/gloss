@@ -5,20 +5,20 @@ const SceneObjectVTable sceneObjectPlaneVTable = (SceneObjectVTable) {
 	&sceneObjectPlaneEmitPhotons
 };
 
-SceneObject makeSceneObjectPlane (const Plane plane, const Matrix transform, const Material *material) {
+SceneObjectPlane makeSceneObjectPlane (const Plane plane, const Material *material) {
 	
-	return (SceneObject) {&sceneObjectPlaneVTable, material, transform, mInversed(transform), {.plane = plane}};
+	return (SceneObjectPlane) {makeSceneObject(&sceneObjectPlaneVTable), plane, material};
 }
 
-Intersection sceneObjectPlaneIntersectRay(const SceneObject object, const Ray ray) {
+Intersection sceneObjectPlaneIntersectRay(const SceneObject *superobject, const Ray ray) {
+	
+	SceneObjectPlane *object = (SceneObjectPlane *) superobject;
 
-	Intersection intersection = pIntersect(object.plane, mrMul(object.inversedTransform, ray));
+	Intersection intersection = pIntersect(object->plane, ray);
 
 	if (intersection.hitType) {
 		
-		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
-		intersection.position = mvMul   (object.transform, intersection.position);
-		intersection.material = object.material;
+		intersection.material = object->material;
 
 		if (intersection.material->isPerfectBlack) {
 			intersection.hitType = perfectBlack;
@@ -28,7 +28,7 @@ Intersection sceneObjectPlaneIntersectRay(const SceneObject object, const Ray ra
 	return intersection;
 }
 
-bool sceneObjectPlaneEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons) {
+bool sceneObjectPlaneEmitPhotons(const SceneObject *superobject, const int numPhotons, PhotonContainer *photons) {
 
 	// You can't really emit a finite number of photons from an infinite plane.
 

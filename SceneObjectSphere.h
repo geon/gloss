@@ -8,17 +8,25 @@
 #include "Ray.h"
 #include "Photon.h"
 #include "PhotonContainer.h"
-#include "SceneObjectVTableForwardDeclaration.h"
+#include "SceneObjectPointerContainer.h"
+#include "allocator.h"
 
 
-SceneObject makeSceneObjectSphere(const Sphere sphere, const Matrix transform, const Material *material);
+typedef struct {
+	const SceneObject parent;
+	Sphere sphere;
+	const Material *material;
+} SceneObjectSphere;
 
-Intersection sceneObjectSphereIntersectRay(const SceneObject object, const Ray ray);
-bool sceneObjectSphereEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons);
+
+SceneObjectSphere makeSceneObjectSphere(const Sphere sphere, const Material *material);
+
+declareAllocator(SceneObjectSphere)
+
+Intersection sceneObjectSphereIntersectRay(const SceneObject *object, const Ray ray);
+bool sceneObjectSphereEmitPhotons(const SceneObject *object, const int numPhotons, PhotonContainer *photons);
 
 extern const SceneObjectVTable sceneObjectSphereVTable;
 
-
-#include "SceneObjectVTable.h"
 
 #endif // SCENEOBJECTSPHERE_H

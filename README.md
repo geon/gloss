@@ -8,7 +8,9 @@ TODO
 ----
 
 * Scene graph restructuring - not flexible enough
+* Remove perfectBlack HitType
 * Refraction
+	* Dispersion
 * Materials
 	* Multiple classes
 	* Glossy / mirror
@@ -16,3 +18,7 @@ TODO
 		* Procedural
 		* Bitmapped
 * Recursive geometry - fractals
+* Better camera model
+	* Depth Of Field
+	* Lens flare / bloom
+	* Tone mapping

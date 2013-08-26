@@ -7,14 +7,18 @@ const SceneObjectVTable sceneObjectUnitPlaneVTable = (SceneObjectVTable) {
 	&sceneObjectUnitPlaneEmitPhotons
 };
 
-SceneObject makeSceneObjectUnitPlane (const Plane plane, const Matrix transform, const Material *material) {
+SceneObjectUnitPlane makeSceneObjectUnitPlane (const Plane plane, const Material *material) {
 
-	return (SceneObject) {&sceneObjectUnitPlaneVTable, material, transform, mInversed(transform), {.plane = plane}};
+	return (SceneObjectUnitPlane) {makeSceneObject(&sceneObjectUnitPlaneVTable), plane, material};
 }
 
-Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject object, const Ray ray) {
+defineAllocator(SceneObjectUnitPlane)
 
-	Intersection intersection = pIntersect(object.plane, mrMul(object.inversedTransform, ray));
+Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject *superobject, const Ray ray) {
+
+	const SceneObjectUnitPlane *object = (SceneObjectUnitPlane *) superobject;
+	
+	Intersection intersection = pIntersect(object->plane, ray);
 
 	if (intersection.hitType) {
 
@@ -31,9 +35,7 @@ Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject object, const Ra
 			return intersection;
 		}
 
-		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
-		intersection.position = mvMul   (object.transform, intersection.position);
-		intersection.material = object.material;
+		intersection.material = object->material;
 		
 		if (intersection.material->isPerfectBlack) {
 			intersection.hitType = perfectBlack;
@@ -43,34 +45,9 @@ Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject object, const Ra
 	return intersection;
 }
 
-bool sceneObjectUnitPlaneEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons) {
+bool sceneObjectUnitPlaneEmitPhotons(const SceneObject *superobject, const int numPhotons, PhotonContainer *photons) {
 
-	const Vector normal = object.plane.normal;
-	
-	Vector u = makeVector(normal.y, normal.z, normal.x);
-	Vector v = makeVector(normal.z, normal.x, normal.y);
+	// TODO: Implement this. Use code from SceneObjectSphere.
 
-	int numU = ceil(sqrtf(numPhotons));
-	int numV = sqrtf(numPhotons);
-
-	for (int iU = 0; iU < numU; ++iU) {
-
-		for (int iV = 0; iV < numV; ++iV) {
-
-			int currentPhoton = iU*numV + iV;
-
-			if (currentPhoton >= numPhotons) {
-				break;
-			}
-
-			Vector position = vAdd(vAdd(
-				vsMul(u, ((iU + randf())/numU * 2)-1),
-				vsMul(v, ((iV + randf())/numV * 2)-1)
-			), vsMul(normal, vEpsilon));
-
-			photonContainerAddValue(photons, makePhoton(makeRay(position, vSampleHemisphere(normal)), csMul(object.material->radience, 1.0 / numPhotons)));
-		}
-	}
-
-	return true;
+	return false;
 }

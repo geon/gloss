@@ -7,20 +7,22 @@ const SceneObjectVTable sceneObjectBoxVTable = (SceneObjectVTable) {
 	&sceneObjectBoxEmitPhotons
 };
 
-SceneObject makeSceneObjectBox (const Vector size, const Matrix transform, const Material *material) {
+SceneObjectBox makeSceneObjectBox (const Vector size, const Material *material) {
 
-	return (SceneObject) {&sceneObjectBoxVTable, material, transform, mInversed(transform), {.box = makeBox(size)}};
+	return (SceneObjectBox) {makeSceneObject(&sceneObjectBoxVTable), makeBox(size), material};
 }
 
-Intersection sceneObjectBoxIntersectRay(const SceneObject object, const Ray ray) {
+defineAllocator(SceneObjectBox)
 
-	Intersection intersection = bIntersect(object.box, mrMul(object.inversedTransform, ray));
+Intersection sceneObjectBoxIntersectRay(const SceneObject *superobject, const Ray ray) {
+
+	const SceneObjectBox *object = (SceneObjectBox *) superobject;
+
+	Intersection intersection = bIntersect(object->box, ray);
 
 	if (intersection.hitType) {
 
-		intersection.normal   = mvMulDir(object.transform, intersection.normal  );
-		intersection.position = mvMul   (object.transform, intersection.position);
-		intersection.material = object.material;
+		intersection.material = object->material;
 		
 		if (intersection.material->isPerfectBlack) {
 			intersection.hitType = perfectBlack;
@@ -30,10 +32,9 @@ Intersection sceneObjectBoxIntersectRay(const SceneObject object, const Ray ray)
 	return intersection;
 }
 
-bool sceneObjectBoxEmitPhotons(const SceneObject object, const int numPhotons, PhotonContainer *photons) {
+bool sceneObjectBoxEmitPhotons(const SceneObject *superobject, const int numPhotons, PhotonContainer *photons) {
 
-
-	// TODO: Implement this.
+	// TODO: Implement this. Use code from SceneObjectSphere.
 	
 	return false;
 }

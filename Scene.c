@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include <math.h>
 #include "SceneObjectSphere.h"
+#include "SceneObjectTransform.h"
 #include "SceneObjectUnitPlane.h"
 #include "SceneObjectBox.h"
 #include "bool.h"
@@ -17,7 +18,7 @@
 
 Scene makeScene () {
 
-	return (Scene) {makeSceneObjectContainer(1000), makeMaterialContainer(10), makePhotonEndPointContainer(1000), makeMatrixIdentity(), makeColor(0.5, 0.7, 1), 0.8};
+	return (Scene) {makeSceneObjectPointerContainer(1000), makeMaterialContainer(10), makePhotonEndPointContainer(1000), makeMatrixIdentity(), makeColor(0.5, 0.7, 1), 0.8};
 }
 
 Color sceneTraceRayAtPixel(const Scene *scene, const int currentPixel, const int width, const int height, const int numCameraRayBounces) {
@@ -36,11 +37,11 @@ void sceneGeneratePhotons(Scene *scene, const int lightRayBounces, const int num
 	
 	photonEndPointContainerClear(&scene->photons);
 	
-	containerForeach (SceneObject, object, scene->objects) {
+	containerForeach (SceneObject *, object, scene->objects) {
 		
-		// TODO: Not only perfect black bodies emits light, and not all do. Emit photons based on light intensity.
-		if(object->material->isPerfectBlack) {
+		// TODO: Only emit photons from object with radiance, and distribute photons based on light intensity.
 
+		{
 			// Spawn photons on the surface of the lightsource.
 			PhotonContainer emittedPhotons = makePhotonContainer(numPhotonsPerLightSource);
 			sceneObjectEmitPhotons(*object, numPhotonsPerLightSource, &emittedPhotons);
@@ -155,7 +156,7 @@ Intersection sceneIntersectRay(const Scene scene, const Ray ray) {
 	closestIntersection.hitType = missed;
 	float minDistance = INFINITY;
 
-	containerForeach (SceneObject, object, scene.objects) {
+	containerForeach (SceneObject *, object, scene.objects) {
 
 		Intersection currentIntersection = sceneObjectIntersectRay(*object, ray);
 
@@ -183,54 +184,53 @@ void buildCornellBox(Scene *scene) {
 	// Lights
 	scene->skyColor = makeColorBlack();
 	float lr = 0.2;
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(makeSphere(makeVector(0, 1-lr - 0.05, 0), lr), makeMatrixIdentity(), lampMaterial));
-
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectSphere(makeSceneObjectSphere(makeSphere(makeVector(0, 1-lr - 0.05, 0), lr), lampMaterial)));
+	
 
 	// Boxes
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectBox(
-		makeVector(.3, .7, .3),
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectTransform(makeSceneObjectTransform(
 		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3))),
-		whiteMaterial
-	));
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectBox(
-		makeVector(.3, .3, .3),
+		(SceneObject *) allocateSceneObjectBox(makeSceneObjectBox(
+			makeVector(.3, .7, .3),
+			whiteMaterial
+		))
+	)));
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectTransform(makeSceneObjectTransform(
 		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), -.3), makeMatrixTranslation(makeVector(.3, -.75, -.3))),
-		whiteMaterial
-	));
+		(SceneObject *) allocateSceneObjectBox(makeSceneObjectBox(
+			makeVector(.3, .3, .3),
+			whiteMaterial
+		))
+	)));
 
 	
 	// Walls
 	
 	// Floor
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
 		makePlane(makeVector(0, 1, 0), -1+vEpsilon),
-		makeMatrixIdentity(),
 		whiteMaterial
-	));
+	)));
 	// Ceiling
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
 		makePlane(makeVector(0, -1, 0), -1+vEpsilon),
-		makeMatrixIdentity(),
 		whiteMaterial
-	));
+	)));
 	// Middle
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
 		makePlane(makeVector(0, 0, -1), -1+vEpsilon),
-		makeMatrixIdentity(),
 		whiteMaterial
-	));
+	)));
 	// Left
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
 		makePlane(makeVector(1, 0, 0), -1+vEpsilon),
-		makeMatrixIdentity(),
 		materialContainerAddValue(&scene->materials, makeMaterial(csMul(makeColor(1, 0.5, 0.1), scene->standardReflectivity), makeColorBlack(), 0))
-	));
+	)));
 	// Right
-	sceneObjectContainerAddValue(&scene->objects, makeSceneObjectUnitPlane(
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
 		makePlane(makeVector(-1, 0, 0), -1+vEpsilon),
-		makeMatrixIdentity(),
 		materialContainerAddValue(&scene->materials, makeMaterial(csMul(makeColor(0.1, 0.3, 0.5), scene->standardReflectivity), makeColorBlack(), 0))
-	));
+	)));
  
 }
 
@@ -269,21 +269,20 @@ void buildSpherePhotonSpawnTest(Scene *scene) {
 	
 	// Lights
 //	scene->skyColor = makeColorLightness(0.5);
-	SceneObject lamp = makeSceneObjectSphere(makeSphere(makeVectorOrigo(), 1), makeMatrixIdentity(), lampMaterial);
-	sceneObjectContainerAddValue(&scene->objects, lamp);
+	SceneObjectSphere lamp = makeSceneObjectSphere(makeSphere(makeVectorOrigo(), 1), lampMaterial);
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectSphere(lamp));
 	
 
 	int numPhotons = 300;
 	PhotonContainer photons = makePhotonContainer(numPhotons);
-	sceneObjectSphereEmitPhotons(lamp, numPhotons, &photons);
+	sceneObjectSphereEmitPhotons((SceneObject *) &lamp, numPhotons, &photons);
 	
 	containerForeach(Photon, photon, photons) {
 
-		sceneObjectContainerAddValue(&scene->objects, makeSceneObjectSphere(
-																			makeSphere(photon->heading.origin, .02),
-																			makeMatrixAxisAngle(vNormalized(makeVector(1,2,0)), 2),
-																			whiteMaterial
-																			));
+		sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectSphere(makeSceneObjectSphere(
+			makeSphere(photon->heading.origin, .02),
+			whiteMaterial
+		)));
 	}
 
 	
