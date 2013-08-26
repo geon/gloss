@@ -2,7 +2,6 @@
 #define SCENEOBJECT_H
 
 #include "SceneObjectVTableForwardDeclaration.h"
-#include "SceneObject.h"
 #include "Intersection.h"
 #include "PhotonContainer.h"
 
