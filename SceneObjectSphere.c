@@ -25,10 +25,6 @@ Intersection sceneObjectSphereIntersectRay(const SceneObject *superobject, const
 	if (intersection.hitType) {
 		
 		intersection.material = object->material;
-		
-		if (intersection.material->isPerfectBlack) {
-			intersection.hitType = perfectBlack;
-		}
 	}
 
 	return intersection;

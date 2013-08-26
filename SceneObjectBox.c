@@ -23,10 +23,6 @@ Intersection sceneObjectBoxIntersectRay(const SceneObject *superobject, const Ra
 	if (intersection.hitType) {
 
 		intersection.material = object->material;
-		
-		if (intersection.material->isPerfectBlack) {
-			intersection.hitType = perfectBlack;
-		}
 	}
 
 	return intersection;

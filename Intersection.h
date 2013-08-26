@@ -7,7 +7,6 @@
 typedef enum {
 	missed,
 	surface,
-	perfectBlack,
 	origin
 } HitType;
 

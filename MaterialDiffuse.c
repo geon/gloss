@@ -7,9 +7,9 @@ const MaterialVTable materialDiffuseVTable = (MaterialVTable) {
 	&materialDiffuseBRDF
 };
 
-MaterialDiffuse makeMaterialDiffuse(const Color reflectivity, const Color radience, const bool isPerfectBlack) {
+MaterialDiffuse makeMaterialDiffuse(const Color reflectivity, const Color radience) {
 	
-	return (MaterialDiffuse) {makeMaterial(&materialDiffuseVTable, reflectivity, radience, isPerfectBlack)};
+	return (MaterialDiffuse) {makeMaterial(&materialDiffuseVTable, reflectivity, radience)};
 }
 
 defineAllocator(MaterialDiffuse)

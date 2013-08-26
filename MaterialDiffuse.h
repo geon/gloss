@@ -10,7 +10,7 @@ typedef struct {
 } MaterialDiffuse;
 
 
-MaterialDiffuse makeMaterialDiffuse(const Color reflectivity, const Color radience, const bool isPerfectBlack);
+MaterialDiffuse makeMaterialDiffuse(const Color reflectivity, const Color radience);
 
 declareAllocator(MaterialDiffuse)
 

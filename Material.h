@@ -13,10 +13,9 @@ struct MaterialStruct {
 	const MaterialVTable *vTable;
 	Color reflectivity;
 	Color radience;
-	bool isPerfectBlack;
 };
 
-Material makeMaterial(const MaterialVTable *vTable, const Color reflectivity, const Color radience, const bool isPerfectBlack);
+Material makeMaterial(const MaterialVTable *vTable, const Color reflectivity, const Color radience);
 
 
 Photon materialSampleBRDF(const Material *material, const Intersection intersection, const Photon incoming);

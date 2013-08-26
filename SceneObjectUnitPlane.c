@@ -36,10 +36,6 @@ Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject *superobject, co
 		}
 
 		intersection.material = object->material;
-		
-		if (intersection.material->isPerfectBlack) {
-			intersection.hitType = perfectBlack;
-		}
 	}
 
 	return intersection;

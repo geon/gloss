@@ -96,11 +96,6 @@ Color sceneTraceRay(const Scene *scene, const Ray ray, int numCameraRayBounces) 
 		// Add the emitted light from any intersected lightsource object.
 		collectedLight = cAdd(collectedLight, cMul(intersection.material->radience, bouncedRay.energy));
 
-		// Hit a perfectly black surface, so stop.
-		if (intersection.hitType == perfectBlack) {
-			break;
-		}
-
 		// Collect light from all photons.
 		Color sumPhotonLight = makeColorBlack();
 		containerForeach (PhotonEndPoint, photonEndPoint, scene->photons) {
@@ -178,8 +173,8 @@ void buildCornellBox(Scene *scene) {
 
 	
 	
-	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity), makeColorBlack(), 0)));
-	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorBlack(), makeColorLightness(7), 1)));
+	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity), makeColorBlack())));
+	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorBlack(), makeColorLightness(7))));
 	
 	
 	// Lights
@@ -225,12 +220,12 @@ void buildCornellBox(Scene *scene) {
 	// Left
 	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
 		makePlane(makeVector(1, 0, 0), -1+vEpsilon),
-		*materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(1, 0.5, 0.1), scene->standardReflectivity), makeColorBlack(), 0)))
+		*materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(1, 0.5, 0.1), scene->standardReflectivity), makeColorBlack())))
 	)));
 	// Right
 	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
 		makePlane(makeVector(-1, 0, 0), -1+vEpsilon),
-		*materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(0.1, 0.3, 0.5), scene->standardReflectivity), makeColorBlack(), 0)))
+		*materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(0.1, 0.3, 0.5), scene->standardReflectivity), makeColorBlack())))
 	)));
  
 }
@@ -264,8 +259,8 @@ void buildSpherePhotonSpawnTest(Scene *scene) {
 	
 	
 	
-	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(0.01), makeColorBlack(), 0)));
-	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorBlack(), makeColorLightness(5), 1)));
+	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(0.01), makeColorBlack())));
+	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorBlack(), makeColorLightness(5))));
 	
 	
 	// Lights
