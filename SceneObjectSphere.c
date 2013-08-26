@@ -21,11 +21,7 @@ Intersection sceneObjectSphereIntersectRay(const SceneObject *superobject, const
 	const SceneObjectSphere *object = (SceneObjectSphere *) superobject;
 
 	Intersection intersection = sIntersect(object->sphere, ray);
-
-	if (intersection.hitType) {
-		
-		intersection.material = object->material;
-	}
+	intersection.material = object->material;
 
 	return intersection;
 }

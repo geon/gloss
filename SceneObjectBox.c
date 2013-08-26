@@ -19,11 +19,7 @@ Intersection sceneObjectBoxIntersectRay(const SceneObject *superobject, const Ra
 	const SceneObjectBox *object = (SceneObjectBox *) superobject;
 
 	Intersection intersection = bIntersect(object->box, ray);
-
-	if (intersection.hitType) {
-
-		intersection.material = object->material;
-	}
+	intersection.material = object->material;
 
 	return intersection;
 }

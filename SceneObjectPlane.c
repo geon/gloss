@@ -15,12 +15,8 @@ Intersection sceneObjectPlaneIntersectRay(const SceneObject *superobject, const 
 	SceneObjectPlane *object = (SceneObjectPlane *) superobject;
 
 	Intersection intersection = pIntersect(object->plane, ray);
+	intersection.material = object->material;
 
-	if (intersection.hitType) {
-		
-		intersection.material = object->material;
-	}
-	
 	return intersection;
 }
 
