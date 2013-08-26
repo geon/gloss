@@ -2,7 +2,7 @@
 #define SCENE_H
 
 #include "SceneObjectPointerContainer.h"
-#include "MaterialContainer.h"
+#include "MaterialPointerContainer.h"
 #include "PhotonEndPointContainer.h"
 #include "Photon.h"
 #include "Matrix.h"
@@ -13,7 +13,7 @@
 
 typedef struct {
 	SceneObjectPointerContainer objects;
-	MaterialContainer materials;
+	MaterialPointerContainer materials;
 	PhotonEndPointContainer photons;
 	Matrix cameraOrientation;
 	Color skyColor;

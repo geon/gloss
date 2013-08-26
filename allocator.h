@@ -1,6 +1,8 @@
 #ifndef ALLOCATOR_H
 #define ALLOCATOR_H
 
+#include <stdlib.h>
+
 
 #define declareAllocator(type) \
 type * allocate##type(type data); \

@@ -1,14 +1,23 @@
-//
-//  MaterialDiffuse.h
-//  gloss
-//
-//  Created by Victor Widell on 2013-08-26.
-//  Copyright (c) 2013 Victor Widell. All rights reserved.
-//
+#ifndef MATERIALDIFFUSE_H
+#define MATERIALDIFFUSE_H
 
-#ifndef gloss_MaterialDiffuse_h
-#define gloss_MaterialDiffuse_h
+#include "Material.h"
+#include "allocator.h"
 
 
+typedef struct {
+	const Material parent;
+} MaterialDiffuse;
 
-#endif
+
+MaterialDiffuse makeMaterialDiffuse(const Color reflectivity, const Color radience, const bool isPerfectBlack);
+
+declareAllocator(MaterialDiffuse)
+
+Photon materialDiffuseSampleBRDF(const Material *material, const Intersection intersection, const Photon incoming);
+Color materialDiffuseBRDF(const Material *material, const Intersection intersection, const Vector incoming, const Vector outgoing);
+
+extern const MaterialVTable materialDiffuseVTable;
+
+
+#endif // MATERIALDIFFUSE_H

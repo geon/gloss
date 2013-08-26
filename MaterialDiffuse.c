@@ -1,9 +1,30 @@
-//
-//  MaterialDiffuse.c
-//  gloss
-//
-//  Created by Victor Widell on 2013-08-26.
-//  Copyright (c) 2013 Victor Widell. All rights reserved.
-//
+#include "MaterialDiffuse.h"
+#include "randf.h"
+#include <math.h>
 
-#include <stdio.h>
+const MaterialVTable materialDiffuseVTable = (MaterialVTable) {
+	&materialDiffuseSampleBRDF,
+	&materialDiffuseBRDF
+};
+
+MaterialDiffuse makeMaterialDiffuse(const Color reflectivity, const Color radience, const bool isPerfectBlack) {
+	
+	return (MaterialDiffuse) {makeMaterial(&materialDiffuseVTable, reflectivity, radience, isPerfectBlack)};
+}
+
+defineAllocator(MaterialDiffuse)
+
+Photon materialDiffuseSampleBRDF(const Material *material, const Intersection intersection, const Photon incoming) {
+	
+	// Diffuse surface
+	
+	return makePhoton(makeRay(vAdd(intersection.position, vsMul(intersection.normal, vEpsilon)), vSampleHemisphere(intersection.normal)), cMul(incoming.energy, material->reflectivity));
+}
+
+Color materialDiffuseBRDF(const Material *material, const Intersection intersection, const Vector incoming, const Vector outgoing) {
+	
+	// Diffuse shading
+	
+	float surfaceIllumination = vDot(intersection.normal, incoming);
+	return csMul(material->reflectivity, fmax(0, surfaceIllumination));
+}
