@@ -25,6 +25,7 @@ Color materialDiffuseBRDF(const Material *superObject, const Intersection inters
 	
 	MaterialDiffuse *material = (MaterialDiffuse *) superObject;
 	
-	float surfaceIllumination = vDot(intersection.normal, incoming);
-	return csMul(material->reflectivity, fmax(0, surfaceIllumination));
+	float surfaceIllumination = fmax(0, vDot(intersection.normal, incoming));
+	
+	return csMul(material->reflectivity, surfaceIllumination);
 }
