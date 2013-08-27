@@ -15,6 +15,7 @@
 #include "SceneObjectBox.h"
 #include "bool.h"
 #include "MaterialDiffuse.h"
+#include "MaterialLamp.h"
 
 
 Scene makeScene () {
@@ -173,8 +174,8 @@ void buildCornellBox(Scene *scene) {
 
 	
 	
-	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity), makeColorBlack())));
-	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorBlack(), makeColorLightness(7))));
+	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity))));
+	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(7))));
 	
 	
 	// Lights
@@ -220,12 +221,12 @@ void buildCornellBox(Scene *scene) {
 	// Left
 	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
 		makePlane(makeVector(1, 0, 0), -1+vEpsilon),
-		*materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(1, 0.5, 0.1), scene->standardReflectivity), makeColorBlack())))
+		*materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(1, 0.5, 0.1), scene->standardReflectivity))))
 	)));
 	// Right
 	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
 		makePlane(makeVector(-1, 0, 0), -1+vEpsilon),
-		*materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(0.1, 0.3, 0.5), scene->standardReflectivity), makeColorBlack())))
+		*materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(0.1, 0.3, 0.5), scene->standardReflectivity))))
 	)));
  
 }
@@ -259,13 +260,13 @@ void buildSpherePhotonSpawnTest(Scene *scene) {
 	
 	
 	
-	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(0.01), makeColorBlack())));
-	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorBlack(), makeColorLightness(5))));
+	Material *blackMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(0))));
+	Material *whiteMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(1))));
 	
 	
 	// Lights
 //	scene->skyColor = makeColorLightness(0.5);
-	SceneObjectSphere lamp = makeSceneObjectSphere(makeSphere(makeVectorOrigo(), 1), lampMaterial);
+	SceneObjectSphere lamp = makeSceneObjectSphere(makeSphere(makeVectorOrigo(), 1), whiteMaterial);
 	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectSphere(lamp));
 	
 
@@ -277,7 +278,7 @@ void buildSpherePhotonSpawnTest(Scene *scene) {
 
 		sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectSphere(makeSceneObjectSphere(
 			makeSphere(photon->heading.origin, .02),
-			whiteMaterial
+			blackMaterial
 		)));
 	}
 

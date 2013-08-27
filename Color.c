@@ -2,6 +2,8 @@
 #include <math.h>
 
 
+const float cEpsilon = 1/10000.0;
+
 Color makeColorWhite() {
 	
 	return makeColorLightness(1);
@@ -20,6 +22,15 @@ Color makeColorLightness(const float l) {
 Color makeColor(const float red, const float green, const float blue) {
 	
 	return (Color) {red, green, blue};
+}
+
+bool cEqual(const Color a, const Color b) {
+	
+	return
+		a.red   + cEpsilon > b.red   && b.red   + cEpsilon > a.red   &&
+		a.green + cEpsilon > b.green && b.green + cEpsilon > a.green &&
+		a.blue  + cEpsilon > b.blue  && b.blue  + cEpsilon > a.blue
+	;
 }
 
 Color cAdd(const Color a, const Color b) {

@@ -1,8 +1,8 @@
 #include "Material.h"
 
-Material makeMaterial(const MaterialVTable *vTable, const Color reflectivity, const Color radience) {
+Material makeMaterial(const MaterialVTable *vTable, const Color radience) {
 
-	return (Material) {vTable, reflectivity, radience};
+	return (Material) {vTable, radience};
 }
 
 Photon materialSampleBRDF(const Material *material, const Intersection intersection, const Photon incoming) {

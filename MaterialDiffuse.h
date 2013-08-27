@@ -7,10 +7,11 @@
 
 typedef struct {
 	const Material parent;
+	Color reflectivity;
 } MaterialDiffuse;
 
 
-MaterialDiffuse makeMaterialDiffuse(const Color reflectivity, const Color radience);
+MaterialDiffuse makeMaterialDiffuse(const Color reflectivity);
 
 declareAllocator(MaterialDiffuse)
 
