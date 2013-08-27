@@ -8,14 +8,11 @@ TODO
 ----
 
 * Materials
-	* Multiple classes
-	* Glossy / mirror
 	* Texturing
 		* Procedural
 		* Bitmapped
-* Remove perfectBlack HitType
-* Refraction
-	* Dispersion
+	* Refraction
+		* Dispersion
 * Recursive geometry - fractals
 * Better camera model
 	* Depth Of Field
