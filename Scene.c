@@ -176,7 +176,7 @@ Intersection sceneIntersectRay(const Scene scene, const Ray ray) {
 void buildCornellBox(Scene *scene) {
 
 	// Camera	
-	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, 3.8));
+	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, 3.74));
 
 	
 	
