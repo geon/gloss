@@ -134,6 +134,11 @@ Color sceneTraceRay(const Scene *scene, const Ray ray, int numCameraRayBounces) 
 
 		// Bounce the camera ray, filtering it by the reflectance.
 		bouncedRay = materialSampleBRDF(intersection.material, intersection, bouncedRay);
+		
+		// When hitting a perfectly black surface, there is no point in tracing further.
+		if (cEqual(bouncedRay.energy, makeColorBlack())) {
+			break;
+		}
 	}
 
 	// Return the average of all sampled paths.
