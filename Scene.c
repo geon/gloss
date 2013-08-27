@@ -16,6 +16,7 @@
 #include "bool.h"
 #include "MaterialDiffuse.h"
 #include "MaterialLamp.h"
+#include "MaterialPhong.h"
 
 
 Scene makeScene () {
@@ -179,6 +180,7 @@ void buildCornellBox(Scene *scene) {
 
 	
 	
+	Material *boxMaterial   = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialPhong(makeMaterialPhong(makeColorLightness(scene->standardReflectivity), 1, 5, 1)));
 	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity))));
 	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(7))));
 	
@@ -194,14 +196,14 @@ void buildCornellBox(Scene *scene) {
 		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3))),
 		(SceneObject *) allocateSceneObjectBox(makeSceneObjectBox(
 			makeVector(.3, .7, .3),
-			whiteMaterial
+			boxMaterial
 		))
 	)));
 	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectTransform(makeSceneObjectTransform(
 		mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), -.3), makeMatrixTranslation(makeVector(.3, -.75, -.3))),
 		(SceneObject *) allocateSceneObjectBox(makeSceneObjectBox(
 			makeVector(.3, .3, .3),
-			whiteMaterial
+			boxMaterial
 		))
 	)));
 
