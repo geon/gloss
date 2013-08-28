@@ -291,3 +291,58 @@ void buildSpherePhotonSpawnTest(Scene *scene) {
 
 	
 }
+
+
+void buildPaintBox(Scene *scene) {
+	
+	// Camera
+	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0.5, 2));
+	
+	
+	
+	Material *paintMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialPhong(makeMaterialPhong(csMul(makeColor(1, .9, .1), scene->standardReflectivity), 0.1, 10000, 0)));
+	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity))));
+	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(5))));
+	
+	
+	// Lights
+	scene->skyColor = makeColorBlack();
+	float lr = 0.2;
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectSphere(makeSceneObjectSphere(makeSphere(makeVector(0, 1-lr - 0.05, 0), lr), lampMaterial)));
+
+	
+	// Ball
+	float br = 0.5;
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectSphere(makeSceneObjectSphere(makeSphere(makeVector(0, -1+br, 0), br), paintMaterial)));
+
+	
+	// Walls
+	
+	// Floor
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+		makePlane(makeVector(0, 1, 0), -1+vEpsilon),
+		whiteMaterial
+	)));
+	// Ceiling
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+		makePlane(makeVector(0, -1, 0), -1+vEpsilon),
+		whiteMaterial
+	)));
+	// Middle
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+		makePlane(makeVector(0, 0, -1), -1+vEpsilon),
+		whiteMaterial
+	)));
+	// Left
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+		makePlane(makeVector(1, 0, 0), -1+vEpsilon),
+		whiteMaterial
+	)));
+	// Right
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+		makePlane(makeVector(-1, 0, 0), -1+vEpsilon),
+		whiteMaterial
+	)));
+	
+}
+
