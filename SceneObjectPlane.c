@@ -2,7 +2,8 @@
 
 const SceneObjectVTable sceneObjectPlaneVTable = (SceneObjectVTable) {
 	&sceneObjectPlaneIntersectRay,
-	&sceneObjectPlaneEmitPhotons
+	&sceneObjectPlaneEmitPhotons,
+	&sceneObjectPlaneRadiantFlux
 };
 
 SceneObjectPlane makeSceneObjectPlane (const Plane plane, const Material *material) {
@@ -27,13 +28,9 @@ bool sceneObjectPlaneEmitPhotons(const SceneObject *superobject, const int numPh
 	return false;
 }
 
-
-
-
-
-
-
-
-
-
-
+float sceneObjectPlaneRadiantFlux(const SceneObject *object) {
+	
+	// Since a plane can't emit photons, it shouldn't have any flux.
+	
+	return 0;
+}

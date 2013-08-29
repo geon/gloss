@@ -4,12 +4,13 @@
 
 const MaterialVTable materialLampVTable = (MaterialVTable) {
 	&materialLampSampleBRDF,
-	&materialLampBRDF
+	&materialLampBRDF,
+	&materialLampIrradience
 };
 
-MaterialLamp makeMaterialLamp(const Color radience) {
+MaterialLamp makeMaterialLamp(const Color irradience) {
 	
-	return (MaterialLamp) {makeMaterial(&materialLampVTable, radience)};
+	return (MaterialLamp) {makeMaterial(&materialLampVTable), irradience};
 }
 
 defineAllocator(MaterialLamp)
@@ -24,4 +25,12 @@ Color materialLampBRDF(const Material *material, const Intersection intersection
 	
 	// Perfectly black surface. All light comes from radience, not reflectance.
 	return makeColorBlack();
+}
+
+Color materialLampIrradience(const Material *superObject) {
+	
+	MaterialLamp *material = (MaterialLamp *) superObject;
+	
+	// Uniformly radiating, perfectly diffuse surface.
+	return material->irradience;
 }

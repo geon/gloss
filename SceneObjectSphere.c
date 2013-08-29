@@ -6,7 +6,8 @@
 
 const SceneObjectVTable sceneObjectSphereVTable = (SceneObjectVTable) {
 	&sceneObjectSphereIntersectRay,
-	&sceneObjectSphereEmitPhotons
+	&sceneObjectSphereEmitPhotons,
+	&sceneObjectSphereRadiantFlux
 };
 
 SceneObjectSphere makeSceneObjectSphere (const Sphere sphere, const Material *material) {
@@ -86,7 +87,8 @@ bool sceneObjectSphereEmitPhotons(const SceneObject *superobject, const int numP
 			
 			Vector position = vAdd(object->sphere.position, vsMul(normal, 1+vEpsilon));
 
-			photonContainerAddValue(photons, makePhoton(makeRay(position, normal), csMul(object->material->radience, 1.0 / numPhotons)));
+			// TODO: Emitting photons only in the direction of the normal. Should be all over the normals hemisphere.
+			photonContainerAddValue(photons, makePhoton(makeRay(position, normal), csMul(materialIrradience(object->material), 1.0 / numPhotons)));
 		}
 	}
 
@@ -103,8 +105,20 @@ bool sceneObjectSphereEmitPhotons(const SceneObject *superobject, const int numP
 		
 		Vector position = vAdd(object->sphere.position, vsMul(normal, 1+vEpsilon));
 		
-		photonContainerAddValue(photons, makePhoton(makeRay(position, normal), csMul(object->material->radience, 1.0 / numPhotons)));
+		photonContainerAddValue(photons, makePhoton(makeRay(position, normal), csMul(materialIrradience(object->material), 1.0 / numPhotons)));
 	}
 	
 	return true;
+}
+
+float sceneObjectSphereRadiantFlux(const SceneObject *superobject) {
+	
+	const SceneObjectSphere *object = (SceneObjectSphere *) superobject;
+	
+	Color averageIrradiance = materialIrradience(object->material);
+
+	float r = object->sphere.radius;
+	float surfaceArea = 4 * PI * r*r;
+	
+	return surfaceArea * cBrightness(averageIrradiance);
 }

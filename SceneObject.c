@@ -15,3 +15,8 @@ bool sceneObjectEmitPhotons(const SceneObject *object, const int numPhotons, Pho
 
 	return object->vTable->emitPhotons(object, numPhotons, photons);
 }
+
+float sceneObjectRadiantFlux(const SceneObject *object) {
+	
+	return object->vTable->sceneObjectRadiantFlux(object);
+}

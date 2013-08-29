@@ -17,6 +17,7 @@ declareAllocator(MaterialDiffuse)
 
 Photon materialDiffuseSampleBRDF(const Material *material, const Intersection intersection, const Photon incoming);
 Color materialDiffuseBRDF(const Material *material, const Intersection intersection, const Vector incoming, const Vector outgoing);
+Color materialDiffuseIrradience(const Material *material);
 
 extern const MaterialVTable materialDiffuseVTable;
 

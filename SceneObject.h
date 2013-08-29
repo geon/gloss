@@ -15,6 +15,7 @@ SceneObject makeSceneObject(const SceneObjectVTable *vTable);
 
 Intersection sceneObjectIntersectRay(const SceneObject *object, const Ray ray);
 bool sceneObjectEmitPhotons(const SceneObject *object, const int numPhotons, PhotonContainer *photons);
+float sceneObjectRadiantFlux(const SceneObject *object);
 
 #include "SceneObjectVTable.h"
 

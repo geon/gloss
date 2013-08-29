@@ -60,6 +60,11 @@ Color csMul(const Color c, const float s) {
 	};
 }
 
+float cBrightness(const Color c) {
+	
+	return (c.red + c.green + c.blue) / 3;
+}
+
 unsigned char linearFloatToGammaEncodedUint8(const float channel, const float gamma) {
 
 	float gammaEncoded = powf(channel, 1/gamma);

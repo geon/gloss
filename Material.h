@@ -11,14 +11,14 @@
 
 struct MaterialStruct {
 	const MaterialVTable *vTable;
-	Color radience;
 };
 
-Material makeMaterial(const MaterialVTable *vTable, const Color radience);
+Material makeMaterial(const MaterialVTable *vTable);
 
 
 Photon materialSampleBRDF(const Material *material, const Intersection intersection, const Photon incoming);
 Color materialBRDF(const Material *material, const Intersection intersection, const Vector incoming, const Vector outgoing);
+Color materialIrradience(const Material *material);
 
 #include "MaterialVTable.h"
 

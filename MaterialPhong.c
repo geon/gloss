@@ -5,12 +5,13 @@
 
 const MaterialVTable materialPhongVTable = (MaterialVTable) {
 	&materialPhongSampleBRDF,
-	&materialPhongBRDF
+	&materialPhongBRDF,
+	&materialPhongIrradience
 };
 
 MaterialPhong makeMaterialPhong(const Color reflectivity, const float specularity, const float exponent, const bool metallic) {
 	
-	return (MaterialPhong) {{makeMaterial(&materialPhongVTable, makeColorBlack()), reflectivity}, specularity, exponent, metallic};
+	return (MaterialPhong) {{makeMaterial(&materialPhongVTable), reflectivity}, specularity, exponent, metallic};
 }
 
 defineAllocator(MaterialPhong)
@@ -80,4 +81,10 @@ Color materialPhongBRDF(const Material *superObject, const Intersection intersec
 		);
 	}
 
+}
+
+Color materialPhongIrradience(const Material *material) {
+	
+	// No light source.
+	return makeColorBlack();
 }

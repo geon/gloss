@@ -96,7 +96,7 @@ Color sceneTraceRay(const Scene *scene, const Ray ray, int numCameraRayBounces) 
 		}
 
 		// Add the emitted light from any intersected lightsource object.
-		collectedLight = cAdd(collectedLight, cMul(intersection.material->radience, bouncedRay.energy));
+		collectedLight = cAdd(collectedLight, cMul(materialIrradience(intersection.material /*, intersection.position, vNegated(ray.direction) */), bouncedRay.energy));
 
 		// Collect light from all photons.
 		Color sumPhotonLight = makeColorBlack();

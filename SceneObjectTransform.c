@@ -2,7 +2,8 @@
 
 const SceneObjectVTable sceneObjectTransformVTable = (SceneObjectVTable) {
 	&sceneObjectTransformIntersectRay,
-	&sceneObjectTransformEmitPhotons
+	&sceneObjectTransformEmitPhotons,
+	&sceneObjectTransformRadiantFlux
 };
 
 SceneObjectTransform makeSceneObjectTransform (const Matrix transform, const SceneObject *subject) {
@@ -58,4 +59,16 @@ bool sceneObjectTransformEmitPhotons(const SceneObject *superobject, const int n
 	photonContainerDestroy(&newPhotons);
 	
 	return success;
+}
+
+float sceneObjectTransformRadiantFlux(const SceneObject *superobject) {
+	
+	const SceneObjectTransform *object = (SceneObjectTransform *) superobject;
+	
+	// Forward the flux calculation.
+	float radiantFlux = sceneObjectRadiantFlux(object->subject);
+
+	// TODO: Take scaling transforms into account.
+	
+	return radiantFlux;
 }

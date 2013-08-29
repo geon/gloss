@@ -4,12 +4,13 @@
 
 const MaterialVTable materialDiffuseVTable = (MaterialVTable) {
 	&materialDiffuseSampleBRDF,
-	&materialDiffuseBRDF
+	&materialDiffuseBRDF,
+	&materialDiffuseIrradience
 };
 
 MaterialDiffuse makeMaterialDiffuse(const Color reflectivity) {
 	
-	return (MaterialDiffuse) {makeMaterial(&materialDiffuseVTable, makeColorBlack()), reflectivity};
+	return (MaterialDiffuse) {makeMaterial(&materialDiffuseVTable), reflectivity};
 }
 
 defineAllocator(MaterialDiffuse)
@@ -28,4 +29,10 @@ Color materialDiffuseBRDF(const Material *superObject, const Intersection inters
 	float surfaceIllumination = fmax(0, vDot(intersection.normal, incoming));
 	
 	return csMul(material->reflectivity, surfaceIllumination);
+}
+
+Color materialDiffuseIrradience(const Material *material) {
+	
+	// No light source.
+	return makeColorBlack();
 }

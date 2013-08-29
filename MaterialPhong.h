@@ -19,6 +19,7 @@ declareAllocator(MaterialPhong)
 
 Photon materialPhongSampleBRDF(const Material *material, const Intersection intersection, const Photon incoming);
 Color materialPhongBRDF(const Material *material, const Intersection intersection, const Vector incoming, const Vector outgoing);
+Color materialPhongIrradience(const Material *material);
 
 extern const MaterialVTable materialPhongVTable;
 

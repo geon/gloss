@@ -24,6 +24,7 @@ declareAllocator(SceneObjectUnitPlane)
 
 Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject *object, const Ray ray);
 bool sceneObjectUnitPlaneEmitPhotons(const SceneObject *object, const int numPhotons, PhotonContainer *photons);
+float sceneObjectUnitPlaneRadiantFlux(const SceneObject *superObject);
 
 extern const SceneObjectVTable sceneObjectPlaneVTable;
 

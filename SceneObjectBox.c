@@ -30,3 +30,19 @@ bool sceneObjectBoxEmitPhotons(const SceneObject *superobject, const int numPhot
 	
 	return false;
 }
+
+float sceneObjectBoxRadiantFlux(const SceneObject *superobject) {
+	
+	const SceneObjectBox *object = (SceneObjectBox *) superobject;
+	
+	Color averageIrradiance = materialIrradience(object->material);
+
+	Vector size = object->box.size;
+	float surfaceArea = (
+		size.x * size.y +
+		size.y * size.z +
+		size.z * size.x
+	) * 2;
+	
+	return surfaceArea * cBrightness(averageIrradiance);
+}

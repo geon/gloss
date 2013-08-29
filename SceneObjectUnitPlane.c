@@ -4,7 +4,8 @@
 
 const SceneObjectVTable sceneObjectUnitPlaneVTable = (SceneObjectVTable) {
 	&sceneObjectUnitPlaneIntersectRay,
-	&sceneObjectUnitPlaneEmitPhotons
+	&sceneObjectUnitPlaneEmitPhotons,
+	&sceneObjectUnitPlaneRadiantFlux
 };
 
 SceneObjectUnitPlane makeSceneObjectUnitPlane (const Plane plane, const Material *material) {
@@ -46,4 +47,14 @@ bool sceneObjectUnitPlaneEmitPhotons(const SceneObject *superobject, const int n
 	// TODO: Implement this. Use code from SceneObjectSphere.
 
 	return false;
+}
+
+float sceneObjectUnitPlaneRadiantFlux(const SceneObject *superobject) {
+	
+	const SceneObjectUnitPlane *object = (SceneObjectUnitPlane *) superobject;
+	
+	Color averageIrradiance = materialIrradience(object->material);
+	
+	// The plane is [-1, 1] in 2 dimensions.
+	return 4 * cBrightness(averageIrradiance);
 }
