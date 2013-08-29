@@ -87,8 +87,8 @@ bool sceneObjectSphereEmitPhotons(const SceneObject *superobject, const int numP
 			
 			Vector position = vAdd(object->sphere.position, vsMul(normal, 1+vEpsilon));
 
-			// TODO: Emitting photons only in the direction of the normal. Should be all over the normals hemisphere.
-			photonContainerAddValue(photons, makePhoton(makeRay(position, normal), csMul(materialIrradience(object->material), 1.0 / numPhotons)));
+			// TODO: Emitted energy should be proportional to the flux, not the irradiance.
+			photonContainerAddValue(photons, makePhoton(makeRay(position, vSampleHemisphere(normal)), csMul(materialIrradience(object->material), 1.0 / numPhotons)));
 		}
 	}
 
@@ -105,7 +105,7 @@ bool sceneObjectSphereEmitPhotons(const SceneObject *superobject, const int numP
 		
 		Vector position = vAdd(object->sphere.position, vsMul(normal, 1+vEpsilon));
 		
-		photonContainerAddValue(photons, makePhoton(makeRay(position, normal), csMul(materialIrradience(object->material), 1.0 / numPhotons)));
+		photonContainerAddValue(photons, makePhoton(makeRay(position, vSampleHemisphere(normal)), csMul(materialIrradience(object->material), 1.0 / numPhotons)));
 	}
 	
 	return true;
