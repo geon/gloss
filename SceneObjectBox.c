@@ -4,7 +4,8 @@
 
 const SceneObjectVTable sceneObjectBoxVTable = (SceneObjectVTable) {
 	&sceneObjectBoxIntersectRay,
-	&sceneObjectBoxEmitPhotons
+	&sceneObjectBoxEmitPhotons,
+	&sceneObjectBoxRadiantFlux
 };
 
 SceneObjectBox makeSceneObjectBox (const Vector size, const Material *material) {
