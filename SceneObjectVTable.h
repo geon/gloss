@@ -10,7 +10,7 @@
 struct SceneObjectVTableStruct {
 	Intersection (*intersectRay)          (const SceneObject *sceneObject, const Ray ray);
 	bool		 (*emitPhotons)           (const SceneObject *sceneObject, const int numPhotons, PhotonContainer *photons);
-	float        (*sceneObjectRadiantFlux)(const SceneObject *object);
+	Color        (*sceneObjectRadiantFlux)(const SceneObject *object);
 };
 
 #endif // SCENEOBJECTVTABLE_H

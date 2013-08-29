@@ -28,9 +28,9 @@ bool sceneObjectPlaneEmitPhotons(const SceneObject *superobject, const int numPh
 	return false;
 }
 
-float sceneObjectPlaneRadiantFlux(const SceneObject *object) {
+Color sceneObjectPlaneRadiantFlux(const SceneObject *object) {
 	
 	// Since a plane can't emit photons, it shouldn't have any flux.
 	
-	return 0;
+	return makeColorBlack();
 }

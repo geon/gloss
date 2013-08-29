@@ -25,7 +25,7 @@ declareAllocator(SceneObjectSphere)
 
 Intersection sceneObjectSphereIntersectRay(const SceneObject *object, const Ray ray);
 bool sceneObjectSphereEmitPhotons(const SceneObject *object, const int numPhotons, PhotonContainer *photons);
-float sceneObjectSphereRadiantFlux(const SceneObject *object);
+Color sceneObjectSphereRadiantFlux(const SceneObject *object);
 
 extern const SceneObjectVTable sceneObjectSphereVTable;
 

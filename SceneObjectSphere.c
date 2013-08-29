@@ -31,6 +31,8 @@ bool sceneObjectSphereEmitPhotons(const SceneObject *superobject, const int numP
 	
 	const SceneObjectSphere *object = (SceneObjectSphere *) superobject;
 	
+	Color flux = sceneObjectSphereRadiantFlux(superobject);
+	
 	/*
 
 	 I use stratified sampling to reduce noise. It means I divide the surface into a grid, then
@@ -87,8 +89,7 @@ bool sceneObjectSphereEmitPhotons(const SceneObject *superobject, const int numP
 			
 			Vector position = vAdd(object->sphere.position, vsMul(normal, 1+vEpsilon));
 
-			// TODO: Emitted energy should be proportional to the flux, not the irradiance.
-			photonContainerAddValue(photons, makePhoton(makeRay(position, vSampleHemisphere(normal)), csMul(materialIrradience(object->material), 1.0 / numPhotons)));
+			photonContainerAddValue(photons, makePhoton(makeRay(position, vSampleHemisphere(normal)), csMul(flux, 1.0 / numPhotons)));
 		}
 	}
 
@@ -111,7 +112,7 @@ bool sceneObjectSphereEmitPhotons(const SceneObject *superobject, const int numP
 	return true;
 }
 
-float sceneObjectSphereRadiantFlux(const SceneObject *superobject) {
+Color sceneObjectSphereRadiantFlux(const SceneObject *superobject) {
 	
 	const SceneObjectSphere *object = (SceneObjectSphere *) superobject;
 	
@@ -120,5 +121,5 @@ float sceneObjectSphereRadiantFlux(const SceneObject *superobject) {
 	float r = object->sphere.radius;
 	float surfaceArea = 4 * PI * r*r;
 	
-	return surfaceArea * cBrightness(averageIrradiance);
+	return csMul(averageIrradiance, surfaceArea);
 }

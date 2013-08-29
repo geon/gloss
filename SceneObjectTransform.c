@@ -61,12 +61,12 @@ bool sceneObjectTransformEmitPhotons(const SceneObject *superobject, const int n
 	return success;
 }
 
-float sceneObjectTransformRadiantFlux(const SceneObject *superobject) {
+Color sceneObjectTransformRadiantFlux(const SceneObject *superobject) {
 	
 	const SceneObjectTransform *object = (SceneObjectTransform *) superobject;
 	
 	// Forward the flux calculation.
-	float radiantFlux = sceneObjectRadiantFlux(object->subject);
+	Color radiantFlux = sceneObjectRadiantFlux(object->subject);
 
 	// TODO: Take scaling transforms into account.
 	

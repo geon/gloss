@@ -25,7 +25,7 @@ declareAllocator(SceneObjectTransform)
 
 Intersection sceneObjectTransformIntersectRay(const SceneObject *object, const Ray ray);
 bool sceneObjectTransformEmitPhotons(const SceneObject *object, const int numPhotons, PhotonContainer *photons);
-float sceneObjectTransformRadiantFlux(const SceneObject *object);
+Color sceneObjectTransformRadiantFlux(const SceneObject *object);
 
 extern const SceneObjectVTable sceneObjectTransformVTable;
 

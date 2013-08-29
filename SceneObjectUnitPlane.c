@@ -49,12 +49,12 @@ bool sceneObjectUnitPlaneEmitPhotons(const SceneObject *superobject, const int n
 	return false;
 }
 
-float sceneObjectUnitPlaneRadiantFlux(const SceneObject *superobject) {
+Color sceneObjectUnitPlaneRadiantFlux(const SceneObject *superobject) {
 	
 	const SceneObjectUnitPlane *object = (SceneObjectUnitPlane *) superobject;
 	
 	Color averageIrradiance = materialIrradience(object->material);
 	
 	// The plane is [-1, 1] in 2 dimensions.
-	return 4 * cBrightness(averageIrradiance);
+	return csMul(averageIrradiance, 4);
 }

@@ -22,7 +22,7 @@ SceneObjectPlane makeSceneObjectPlane(const Plane plane, const Material *materia
 
 Intersection sceneObjectPlaneIntersectRay(const SceneObject *object, const Ray ray);
 bool sceneObjectPlaneEmitPhotons(const SceneObject *object, const int numPhotons, PhotonContainer *photons);
-float sceneObjectPlaneRadiantFlux(const SceneObject *object);
+Color sceneObjectPlaneRadiantFlux(const SceneObject *object);
 
 extern const SceneObjectVTable sceneObjectPlaneVTable;
 
