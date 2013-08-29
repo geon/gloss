@@ -42,9 +42,11 @@ void sceneGeneratePhotons(Scene *scene, const int lightRayBounces, const int num
 	
 	containerForeach (SceneObject *, object, scene->objects) {
 		
-		// TODO: Only emit photons from object with radiance, and distribute photons based on light intensity.
+		// TODO: Distribute photons based on light intensity.
+		
+		// Only emit photons from object with radiance.
+		if (sceneObjectRadiantFlux(*object) > vEpsilon) {
 
-		{
 			// Spawn photons on the surface of the lightsource.
 			PhotonContainer emittedPhotons = makePhotonContainer(numPhotonsPerLightSource);
 			sceneObjectEmitPhotons(*object, numPhotonsPerLightSource, &emittedPhotons);
