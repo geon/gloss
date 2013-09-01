@@ -28,6 +28,7 @@ Intersection sceneObjectTransformIntersectRay(const SceneObject *superobject, co
 		
 		intersection.normal   = mvMulDir(object->transform, intersection.normal  );
 		intersection.position = mvMul   (object->transform, intersection.position);
+		intersection.distance = intersection.distance * mScale(object->transform);
 	}
 	
 	return intersection;
@@ -46,9 +47,12 @@ bool sceneObjectTransformEmitPhotons(const SceneObject *superobject, const int n
 	if (success) {
 
 		// Transform the photons.
+		float scale = mScale(object->transform);
+		float areaScale = scale * scale;
 		containerForeach(Photon, photon, newPhotons) {
 			
 			photon->heading = mrMul(object->transform, photon->heading);
+			photon->energy = csMul(photon->energy, areaScale);
 		}
 		
 		// "Return" the new, transformed photons.
@@ -67,8 +71,8 @@ Color sceneObjectTransformRadiantFlux(const SceneObject *superobject) {
 	
 	// Forward the flux calculation.
 	Color radiantFlux = sceneObjectRadiantFlux(object->subject);
-
-	// TODO: Take scaling transforms into account.
 	
-	return radiantFlux;
+	float scale = mScale(object->transform);
+	
+	return csMul(radiantFlux, scale * scale);
 }
