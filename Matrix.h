@@ -11,6 +11,7 @@ typedef struct {
 Matrix makeMatrixZero();
 Matrix makeMatrixIdentity();
 Matrix makeMatrixTranslation(const Vector v);
+Matrix makeMatrixScale(const float s);
 Matrix makeMatrixAxisAngle(const Vector axis, const float angle);
 
 bool mEqual(const Matrix a, const Matrix b);
@@ -23,5 +24,7 @@ Vector mvMulDir(const Matrix Matrix, const Vector Vector);
 Ray mrMul(const Matrix matrix, const Ray ray);
 
 Matrix mInversed();
+
+float mScale(const Matrix matrix);
 
 #endif // MATRIX_H

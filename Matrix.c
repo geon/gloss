@@ -31,6 +31,16 @@ Matrix makeMatrixTranslation(const Vector v) {
 	};
 }
 
+Matrix makeMatrixScale(const float s) {
+	
+	return (Matrix) {
+		s, 0, 0, 0,
+		0, s, 0, 0,
+		0, 0, s, 0,
+		0, 0, 0, 1
+	};
+}
+
 Matrix makeMatrixAxisAngle(const Vector axis, const float angle) {
 	
 	float length = vLength(axis);
@@ -290,5 +300,12 @@ Matrix mInversed(const Matrix matrix) {
   return returnValue;
 }
 
+float mScale(const Matrix matrix) {
 
-
+	return powf(
+		  matrix.values[0][0] * (matrix.values[1][1] * matrix.values[2][2] - matrix.values[1][2] * matrix.values[2][1])
+		- matrix.values[0][1] * (matrix.values[1][0] * matrix.values[2][2] - matrix.values[1][2] * matrix.values[2][0])
+		+ matrix.values[0][2] * (matrix.values[1][0] * matrix.values[2][1] - matrix.values[1][1] * matrix.values[2][0]),
+		1/3.0
+	);
+}
