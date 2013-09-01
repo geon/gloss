@@ -41,8 +41,8 @@ int main ( int argc, char** argv )
 	}
 
 	Scene scene = makeScene();
-//	buildCornellBox(&scene);
-	buildPaintBox(&scene);
+	buildCornellBox(&scene);
+//	buildPaintBox(&scene);
 
 	
 
