@@ -12,6 +12,9 @@ TODO
 ----
 
 * Materials
+	* Seems I had misunderstood diffuse relfection: http://en.wikipedia.org/wiki/Diffuse_reflection
+		The BRDF function is correct, dot(normal, lightDir)
+		But the importance sampling whould prioritize the normal of the surface, and drop to 0 at the tangent, just like the BRDF.
 	* Fresnel term
 	* Texturing
 		* Procedural
