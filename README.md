@@ -6,7 +6,10 @@ A [bidirectional path tracer](http://en.wikipedia.org/wiki/Path_tracing#Bidirect
 Blog Posts
 ----------
 
-[Gloss - My Bidirectional Path Tracer](http://geon.github.io/programming/2013/08/22/gloss-my-bidirectional-path-tracer/)
+* [Gloss - My Bidirectional Path Tracer](http://geon.github.io/programming/2013/08/22/gloss-my-bidirectional-path-tracer/)
+* [Object Oriented C](http://geon.github.io/programming/2013/09/01/object-oriented-c)
+* [Restructured Code And Glossy Reflections](http://geon.github.io/programming/2013/09/01/restructured-code-and-glossy-reflections)
+* [Generating Tangents From A Normal](http://geon.github.io/programming/2013/09/02/generating-tangents-from-a-normal/)
 
 TODO
 ----
