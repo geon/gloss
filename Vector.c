@@ -103,6 +103,18 @@ Vector vNegated(const Vector v) {
 	};
 }
 
+Vector vTangent(const Vector v) {
+	
+	// Rotate the order of the coordinates, and negate when wrapping around.
+	// This will create a tangent for any unit vector.
+	// Apply again to the result for 2 tangents.
+	return (Vector) {
+		-v.z,
+		 v.x,
+		 v.y
+	};
+}
+
 Vector vRotated(const Vector v, const Vector axis, const float angle) {
 
 	return vAdd(vAdd(vsMul(v, cosf(angle)), vsMul(vCross(axis, v), sinf(angle))), vsMul(axis, vDot(axis, v) * (1-cosf(angle))));
@@ -115,10 +127,8 @@ Vector vReflected(const Vector v, const Vector normal) {
 
  Vector vSampleHemisphere(const Vector normal) {
 
-	 Vector tangent = vNormalized(vCross(normal, makeVector(randf(), randf(), randf())));
-
 	 return vRotated(
-		 vRotated(normal, tangent, acosf(sqrtf(randf()))),
+		 vRotated(normal, vTangent(normal), acosf(sqrtf(randf()))),
 		 normal,
 		 randf() * 2*PI
 	 );

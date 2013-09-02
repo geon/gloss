@@ -30,7 +30,7 @@ Photon materialPhongSampleBRDF(const Material *superObject, const Intersection i
 
 		// Specular component.
 		Vector perfectReflection = vReflected(incoming.heading.direction, intersection.normal);
-		Vector tangent = vCross(intersection.normal, perfectReflection);
+		Vector tangent = vTangent(perfectReflection);
 		
 		// Try n times to find a valid light direction. Fallback to the perfect reflection.
 		// I just wanted this to be a guaranteed finite loop.
