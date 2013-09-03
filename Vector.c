@@ -103,16 +103,18 @@ Vector vNegated(const Vector v) {
 	};
 }
 
-Vector vTangent(const Vector v) {
+Vector vTangent(const Vector normal) {
 	
-	// Rotate the order of the coordinates, and negate when wrapping around.
-	// This will create a tangent for any unit vector.
-	// Apply again to the result for 2 tangents.
-	return (Vector) {
-		-v.z,
-		 v.x,
-		 v.y
-	};
+	// Try to cross with an arbitrary vector.
+	Vector tangent = vCross(normal, makeVector(1, 0, 0));
+	
+	// Try again, with another arbitrary vector if it failed.
+	if (vEqual(tangent, makeVectorOrigo())) {
+		
+		tangent = vCross(normal, makeVector(0, 1, 0));
+	}
+	
+	return tangent;
 }
 
 Vector vRotated(const Vector v, const Vector axis, const float angle) {

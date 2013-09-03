@@ -26,7 +26,7 @@ float  vLength       (const Vector v);
 float  vLengthSquared(const Vector v);
 Vector vNormalized   (const Vector v);
 Vector vNegated      (const Vector v);
-Vector vTangent      (const Vector v);
+Vector vTangent      (const Vector normal);
 
 Vector vRotated(const Vector v, const Vector axis, const float angle);
 Vector vReflected(const Vector v, const Vector normal);
