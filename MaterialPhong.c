@@ -29,31 +29,38 @@ Photon materialPhongSampleBRDF(const Material *superObject, const Intersection i
 	}else{
 
 		// Specular component.
-		Vector perfectReflection = vReflected(incoming.heading.direction, intersection.normal);
-		Vector tangent = vTangent(perfectReflection);
+		
+		
+		
+		
 		
 		// Try n times to find a valid light direction. Fallback to the perfect reflection.
 		// I just wanted this to be a guaranteed finite loop.
-		Vector reflectedDirection = perfectReflection;
+		Vector imperfectNormal = intersection.normal;
+		Vector tangent = vTangent(intersection.normal);
+		Vector reflectedDirection;
 		for (int i=0; i<100; ++i) {
 
-			// Rotate the perfect reflection randomly, weighted by the Phong specularity function.
-			Vector randomizedDirection = vRotated(
-				vRotated(perfectReflection, tangent, acosf(powf(randf(), 1/(material->exponent+1)))),
-				perfectReflection,
+			// The perfect reflection should be rotated randomly, weighted by the Phong specularity
+			// function. Instead, I rotate the normal the ray is reflected in, by half that angle.
+			Vector randomizedNormal = vRotated(
+				vRotated(intersection.normal, tangent, 0.5 * acosf(powf(randf(), 1/(material->exponent+1)))),
+				intersection.normal,
 				randf() * 2*PI
 			);
 			
+			reflectedDirection = vReflected(incoming.heading.direction, imperfectNormal);
+			
 			// When a valid direction is found, we're done.
-			if(vDot(randomizedDirection, intersection.normal) > 0) {
+			if(vDot(reflectedDirection, intersection.normal) > 0) {
 				
-				reflectedDirection = randomizedDirection;
-				
+				imperfectNormal = randomizedNormal;
 				break;
 			}
 		}
-		
-		return makePhoton(makeRay(vAdd(intersection.position, vsMul(intersection.normal, vEpsilon)), reflectedDirection), (material->metallic ? cMul(incoming.energy, material->parent.reflectivity) : incoming.energy));
+
+		Vector offset = vsMul(intersection.normal, vEpsilon); // Avoid hitting the same surface again.
+		return makePhoton(makeRay(vAdd(intersection.position, offset), reflectedDirection), (material->metallic ? cMul(incoming.energy, material->parent.reflectivity) : incoming.energy));
 	}
 }
 

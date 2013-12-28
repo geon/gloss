@@ -1,5 +1,6 @@
 #include "MaterialDiffuse.h"
 #include "randf.h"
+#include "pi.h"
 #include <math.h>
 
 const MaterialVTable materialDiffuseVTable = (MaterialVTable) {
@@ -19,7 +20,15 @@ Photon materialDiffuseSampleBRDF(const Material *superObject, const Intersection
 	
 	MaterialDiffuse *material = (MaterialDiffuse *) superObject;
 	
-	return makePhoton(makeRay(vAdd(intersection.position, vsMul(intersection.normal, vEpsilon)), vSampleHemisphere(intersection.normal)), cMul(incoming.energy, material->reflectivity));
+//	2*acos(1-x)/pi
+
+	Vector reflectedDirection = vRotated(
+		vRotated(intersection.normal, vTangent(intersection.normal), acosf(1-randf())),
+		intersection.normal,
+		randf() * 2*PI
+	);
+	
+	return makePhoton(makeRay(vAdd(intersection.position, vsMul(intersection.normal, vEpsilon)), reflectedDirection), cMul(incoming.energy, material->reflectivity));
 }
 
 Color materialDiffuseBRDF(const Material *superObject, const Intersection intersection, const Vector incoming, const Vector outgoing) {
