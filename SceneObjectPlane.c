@@ -11,6 +11,8 @@ SceneObjectPlane makeSceneObjectPlane (const Plane plane, const Material *materi
 	return (SceneObjectPlane) {makeSceneObject(&sceneObjectPlaneVTable), plane, material};
 }
 
+defineAllocator(SceneObjectPlane)
+
 Intersection sceneObjectPlaneIntersectRay(const SceneObject *superobject, const Ray ray) {
 	
 	SceneObjectPlane *object = (SceneObjectPlane *) superobject;

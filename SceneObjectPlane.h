@@ -8,7 +8,7 @@
 #include "Ray.h"
 #include "Photon.h"
 #include "PhotonContainer.h"
-#include "SceneObjectPointerContainer.h"
+#include "allocator.h"
 
 
 typedef struct {
@@ -19,6 +19,8 @@ typedef struct {
 
 
 SceneObjectPlane makeSceneObjectPlane(const Plane plane, const Material *material);
+
+declareAllocator(SceneObjectPlane)
 
 Intersection sceneObjectPlaneIntersectRay(const SceneObject *object, const Ray ray);
 bool sceneObjectPlaneEmitPhotons(const SceneObject *object, const int numPhotons, PhotonContainer *photons);

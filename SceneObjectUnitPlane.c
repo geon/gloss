@@ -44,6 +44,10 @@ Intersection sceneObjectUnitPlaneIntersectRay(const SceneObject *superobject, co
 
 bool sceneObjectUnitPlaneEmitPhotons(const SceneObject *superobject, const int numPhotons, PhotonContainer *photons) {
 
+	if (!numPhotons) {
+		return false;
+	}
+	
 	const SceneObjectUnitPlane *object = (SceneObjectUnitPlane *) superobject;
 	
 	Color flux = sceneObjectUnitPlaneRadiantFlux(superobject);

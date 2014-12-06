@@ -36,7 +36,6 @@ Photon materialPhongSampleBRDF(const Material *superObject, const Intersection i
 		
 		// Try n times to find a valid light direction. Fallback to the perfect reflection.
 		// I just wanted this to be a guaranteed finite loop.
-		Vector imperfectNormal = intersection.normal;
 		Vector tangent = vTangent(intersection.normal);
 		Vector reflectedDirection;
 		for (int i=0; i<100; ++i) {
@@ -49,12 +48,11 @@ Photon materialPhongSampleBRDF(const Material *superObject, const Intersection i
 				randf() * 2*PI
 			);
 			
-			reflectedDirection = vReflected(incoming.heading.direction, imperfectNormal);
+			reflectedDirection = vReflected(incoming.heading.direction, randomizedNormal);
 			
 			// When a valid direction is found, we're done.
 			if(vDot(reflectedDirection, intersection.normal) > 0) {
-				
-				imperfectNormal = randomizedNormal;
+
 				break;
 			}
 		}

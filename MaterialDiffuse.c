@@ -20,15 +20,22 @@ Photon materialDiffuseSampleBRDF(const Material *superObject, const Intersection
 	
 	MaterialDiffuse *material = (MaterialDiffuse *) superObject;
 	
-//	2*acos(1-x)/pi
-
 	Vector reflectedDirection = vRotated(
-		vRotated(intersection.normal, vTangent(intersection.normal), acosf(1-randf())),
+		vRotated(intersection.normal, vTangent(intersection.normal), acosf(randf())),
 		intersection.normal,
 		randf() * 2*PI
 	);
 	
-	return makePhoton(makeRay(vAdd(intersection.position, vsMul(intersection.normal, vEpsilon)), reflectedDirection), cMul(incoming.energy, material->reflectivity));
+	return makePhoton(
+		makeRay(
+			vAdd(
+				intersection.position,
+				vsMul(intersection.normal, vEpsilon)
+			),
+			reflectedDirection
+		),
+		cMul(incoming.energy, material->reflectivity)
+	);
 }
 
 Color materialDiffuseBRDF(const Material *superObject, const Intersection intersection, const Vector incoming, const Vector outgoing) {
