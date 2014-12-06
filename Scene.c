@@ -12,11 +12,14 @@
 #include "SceneObjectSphere.h"
 #include "SceneObjectTransform.h"
 #include "SceneObjectUnitPlane.h"
+#include "SceneObjectPlane.h"
 #include "SceneObjectBox.h"
 #include "bool.h"
 #include "MaterialDiffuse.h"
 #include "MaterialLamp.h"
 #include "MaterialPhong.h"
+#include "MaterialTransparent.h"
+#include "MaterialCheckered.h"
 
 
 Scene makeScene () {
@@ -374,3 +377,148 @@ void buildPaintBox(Scene *scene) {
 	
 }
 
+
+ 
+void buildRefractionBox(Scene *scene) {
+	
+	// Camera
+	scene->cameraOrientation = mMul(mMul(makeMatrixTranslation(makeVector(0, 0, 3)), makeMatrixAxisAngle(makeVector(1, 0, 0), -0.3)), makeMatrixAxisAngle(makeVector(0, 1, 0), -0.5));
+	
+	
+	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity))));
+	Material *blackMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity * 0.1))));
+	Material *checkeredMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialCheckered(makeMaterialCheckered(whiteMaterial, blackMaterial)));
+
+	Material *glass = *materialPointerContainerAddValue(
+		&scene->materials,
+		(Material *) allocateMaterialTransparent(makeMaterialTransparent(
+			makeColorLightness(scene->standardReflectivity*0), // reflectivity
+			1, // specularity
+			10000, // exponent
+			0, // metallic
+			1, // transparency
+			1.5, // IOR
+			makeColorLightness(0.5) // halfAbsorbDistance
+		))
+	);
+	
+	Material *lampMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(5))));
+	
+	
+	// Lights
+	scene->skyColor = makeColorLightness(0);
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectTransform(makeSceneObjectTransform(
+																															   mMul(makeMatrixTranslation(makeVector(0, 1-vEpsilon, 0)), makeMatrixScale(.5)),
+																															   (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(makePlane(makeVector(0, -1, 0), 0), lampMaterial))
+																															   )));
+	
+	
+	// Ball
+	float br = 0.6;
+	sceneObjectPointerContainerAddValue(
+		&scene->objects,
+		(SceneObject *) allocateSceneObjectSphere(makeSceneObjectSphere(
+			makeSphere(makeVector(0, 0, 0), br),
+			glass
+		))
+	);
+	
+	// Floor
+	sceneObjectPointerContainerAddValue(
+		&scene->objects,
+		(SceneObject *) allocateSceneObjectPlane(makeSceneObjectPlane(
+			makePlane(makeVector(0, 1, 0), -br),
+			checkeredMaterial
+		))
+	);
+}
+
+
+/*
+void buildRefractionBox(Scene *scene) {
+	
+	// Camera
+	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, 3.74));
+	
+	
+	
+	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity))));
+	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(3))));
+	
+	
+	// Lights
+	scene->skyColor = makeColorLightness(0);
+	//	float lr = 0.2;
+	//	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectSphere(makeSceneObjectSphere(makeSphere(makeVector(0, 1-lr - 0.05, 0), lr), lampMaterial)));
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectTransform(makeSceneObjectTransform(
+																															   mMul(makeMatrixTranslation(makeVector(0, 1-vEpsilon, 0)), makeMatrixScale(.5)),
+																															   (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(makePlane(makeVector(0, -1, 0), 0), lampMaterial))
+																															   )));
+	
+	
+	// Ball
+	float br = 0.6;
+	sceneObjectPointerContainerAddValue(
+										&scene->objects,
+										(SceneObject *) allocateSceneObjectSphere(makeSceneObjectSphere(
+																										makeSphere(makeVector(-.4, -1+br, -.8), br),
+																										*materialPointerContainerAddValue(
+																																		  &scene->materials,
+																																		  (Material *) allocateMaterialTransparent(makeMaterialTransparent(
+																																																		   *materialPointerContainerAddValue(
+																																																											 &scene->materials,
+																																																											 (Material *) allocateMaterialPhong(makeMaterialPhong(makeColorBlack(), 0.5, 10, 0))
+																																																											 ),
+																																																		   1, 1.5, makeColorLightness(0.5)
+																																																		   ))
+																																		  )
+																										))
+										);
+	
+	// Boxes
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectTransform(makeSceneObjectTransform(
+																															   mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), .3), makeMatrixTranslation(makeVector(-.3, -.3, .3))),
+																															   (SceneObject *) allocateSceneObjectBox(makeSceneObjectBox(
+																																														 makeVector(.3, .7, .3),
+																																														 whiteMaterial
+																																														 ))
+																															   )));
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectTransform(makeSceneObjectTransform(
+																															   mMul(makeMatrixAxisAngle(makeVector(0, 1, 0), -.3), makeMatrixTranslation(makeVector(.3, -.75, -.3))),
+																															   (SceneObject *) allocateSceneObjectBox(makeSceneObjectBox(
+																																														 makeVector(.3, .3, .3),
+																																														 whiteMaterial
+																																														 ))
+																															   )));
+	
+	
+	// Walls
+	
+	// Floor
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+																															   makePlane(makeVector(0, 1, 0), -1+vEpsilon),
+																															   whiteMaterial
+																															   )));
+	// Ceiling
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+																															   makePlane(makeVector(0, -1, 0), -1+vEpsilon),
+																															   whiteMaterial
+																															   )));
+	// Middle
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+																															   makePlane(makeVector(0, 0, -1), -1+vEpsilon),
+																															   whiteMaterial
+																															   )));
+	// Left
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+																															   makePlane(makeVector(1, 0, 0), -1+vEpsilon),
+																															   *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(1, 0.5, 0.1), scene->standardReflectivity))))
+																															   )));
+	// Right
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+																															   makePlane(makeVector(-1, 0, 0), -1+vEpsilon),
+																															   *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(csMul(makeColor(0.1, 0.3, 0.5), scene->standardReflectivity))))
+																															   )));
+	
+}
+*/
