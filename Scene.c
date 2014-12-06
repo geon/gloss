@@ -114,7 +114,7 @@ Color sceneTraceRay(const Scene *scene, const Ray ray, int numCameraRayBounces) 
 			Intersection occluder = sceneIntersectRay(*scene, shadowRay);
 
 			// For any unoccluded scene.photons, collect the energy.
-			if(occluder.hitType == missed || occluder.distance > lightDistance){
+			if(occluder.hitType == missed || occluder.distance > lightDistance - vEpsilon){
 
 				// Incoming intensity.
 				Color incomingLight = photonEndPoint->photon.energy;
