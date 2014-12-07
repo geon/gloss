@@ -15,10 +15,9 @@ Intersection sIntersect(const Sphere sphere, const Ray ray) {
 	Intersection intersection;
 	intersection.hitType = missed;
 
-	float a = vLengthSquared(ray.direction);
 	float b = vDot(vSub(ray.origin, sphere.position), ray.direction);
 	float c = vLengthSquared(vSub(ray.origin, sphere.position)) - sphere.radius*sphere.radius;
-	float det = b*b - a*c;
+	float det = b*b - c;
 
 	if (det>=0) {
 
@@ -27,7 +26,7 @@ Intersection sIntersect(const Sphere sphere, const Ray ray) {
 		float t1 = -b - det;
 		if (t1>0.0001) {
 
-			intersection.distance = t1/a;
+			intersection.distance = t1;
 
 			// Identical to next block.
 			intersection.hitType = surface;
@@ -39,7 +38,7 @@ Intersection sIntersect(const Sphere sphere, const Ray ray) {
 			float t2=-b+det;
 			if (t2>0.0001) {
 
-				intersection.distance = t2/a;
+				intersection.distance = t2;
 
 				// Identical to previous block.
 				intersection.hitType = surface;
