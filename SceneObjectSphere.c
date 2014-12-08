@@ -118,8 +118,5 @@ Color sceneObjectSphereRadiantFlux(const SceneObject *superobject) {
 	
 	Color averageIrradiance = materialIrradience(object->material);
 
-	float r = object->sphere.radius;
-	float surfaceArea = 4 * PI * r*r;
-	
-	return csMul(averageIrradiance, surfaceArea);
+	return csMul(averageIrradiance, sSurfaceArea(object->sphere));
 }
