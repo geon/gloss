@@ -30,5 +30,6 @@ Intersection sceneIntersectRay(const Scene scene, const Ray ray);
 void buildCornellBox(Scene *scene);
 void buildPaintBox(Scene *scene);
 void buildRefractionBox(Scene *scene);
+void buildCornellCylinderBox(Scene *scene);
 
 #endif // SCENE_H

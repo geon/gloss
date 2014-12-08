@@ -41,7 +41,8 @@ int main ( int argc, char** argv )
 	}
 
 	Scene scene = makeScene();
-	buildRefractionBox(&scene);
+//	buildRefractionBox(&scene);
+	buildCornellCylinderBox(&scene);
 
 	
 
