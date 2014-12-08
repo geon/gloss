@@ -185,7 +185,6 @@ void buildCornellBox(Scene *scene) {
 
 	
 	
-	Material *boxMaterial   = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialPhong(makeMaterialPhong(makeColorLightness(scene->standardReflectivity), 1, 5, 1)));
 	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity))));
 	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(12))));
 	
