@@ -1,8 +1,9 @@
 #include "Cylinder.h"
+#include "Plane.h"
 #include "Ray.h"
+#include "pi.h"
 #include <math.h>
 //#include "randf.h"
-#include "pi.h"
 
 
 Cylinder makeCylinder(const Vector endA, const Vector endB, const float radius) {
@@ -23,9 +24,10 @@ Intersection cIntersect(const Cylinder cylinder, const Ray ray) {
 	Vector rayDirectionProjectedOntoCylinderVector = vsMul(cylinderDirection, vDot(ray.direction, cylinderDirection));
 	Vector rayDirectionInCylinderPlane = vNormalized(vSub(ray.direction, rayDirectionProjectedOntoCylinderVector));
 	
-	Vector cylinderEndProjectedOntoCylinderVector = vsMul(cylinderDirection, vDot(cylinder.endA, cylinderDirection));
-	Vector cylinderEndInCylinderPlane = vSub(cylinder.endA, cylinderEndProjectedOntoCylinderVector);
-	Vector rayOriginProjectedOntoCylinderVector = vAdd(cylinderEndInCylinderPlane, vsMul(cylinderDirection, vDot(ray.origin, cylinderDirection)));
+	float endAAlongDirection = vDot(cylinder.endA, cylinderDirection);
+	Vector endAProjectedOntoCylinderVector = vsMul(cylinderDirection, endAAlongDirection);
+	Vector endInCylinderPlane = vSub(cylinder.endA, endAProjectedOntoCylinderVector);
+	Vector rayOriginProjectedOntoCylinderVector = vAdd(endInCylinderPlane, vsMul(cylinderDirection, vDot(ray.origin, cylinderDirection)));
 		
 
 	// Modified sphere intersetion test.
@@ -45,12 +47,9 @@ Intersection cIntersect(const Cylinder cylinder, const Ray ray) {
 		if (t1>0.0001) {
 
 			intersection.distance = t1;
-
-			// Identical to next block.
-			intersection.hitType = surface;
-			intersection.position = vAdd(ray.origin, vsMul(ray.direction, intersection.distance));
-			Vector intersectionProjectedOntoCylinder = vsMul(cylinderDirection, vDot(intersection.position, cylinderDirection));
-			intersection.normal = vsDiv(vSub(intersection.position, intersectionProjectedOntoCylinder), cylinder.radius);
+			goto cylinderIntersection;
+			
+			// Yeah, I know the stigma around GOTO, but it was the best way to reduce code duplication.
 
 		} else {
 
@@ -58,16 +57,61 @@ Intersection cIntersect(const Cylinder cylinder, const Ray ray) {
 			if (t2>0.0001) {
 
 				intersection.distance = t2;
-
-				// Identical to previous block.
-				intersection.hitType = surface;
-				intersection.position = vAdd(ray.origin, vsMul(ray.direction, intersection.distance));
-				Vector intersectionProjectedOntoCylinder = vsMul(cylinderDirection, vDot(intersection.position, cylinderDirection));
-				intersection.normal = vsDiv(vSub(intersection.position, intersectionProjectedOntoCylinder), cylinder.radius);
+				goto cylinderIntersection;
 			}
 		}
 	}
+	
+	//  No hit, so return miss.
+	return intersection;
 
+
+cylinderIntersection:;
+
+	intersection.hitType = surface;
+	intersection.position = vAdd(ray.origin, vsMul(ray.direction, intersection.distance));
+	Vector intersectionProjectedOntoCylinder = vsMul(cylinderDirection, vDot(intersection.position, cylinderDirection));
+	intersection.normal = vsDiv(vSub(intersection.position, intersectionProjectedOntoCylinder), cylinder.radius);
+
+
+	// Check ends.
+	
+	float intersectionAlongDirection = vDot(intersection.position, cylinderDirection);
+	float endBAlongDirection = vDot(cylinder.endB, cylinderDirection);
+
+	Plane cap;
+	Vector relevantEnd;
+	if (intersectionAlongDirection < endAAlongDirection) {
+
+		// TODO: Store the endcaps?
+		cap = makePlane(vNegated(cylinderDirection), -endAAlongDirection);
+		relevantEnd = cylinder.endA;
+		goto capIntersection;
+	}
+	if (intersectionAlongDirection > endBAlongDirection) {
+
+		cap = makePlane(cylinderDirection, -endBAlongDirection);
+		relevantEnd = cylinder.endB;
+		goto capIntersection;
+	}
+
+	// No hit, so return cylinder/miss.
+	return intersection;
+
+
+capIntersection:;
+
+	Intersection capIntersection = pIntersect(cap, ray);
+	if (vLengthSquared(vSub(capIntersection.position, relevantEnd)) < cylinder.radius * cylinder.radius) {
+		
+		intersection = capIntersection;
+		
+	} else {
+		
+		intersection.hitType = missed;
+	}
+
+	// The cap intersection.
 	return intersection;
 }
 

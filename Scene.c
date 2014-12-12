@@ -440,7 +440,7 @@ void buildCornellCylinderBox(Scene *scene) {
 	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, 3.74));
 	
 	Material *whiteMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialDiffuse(makeMaterialDiffuse(makeColorLightness(scene->standardReflectivity))));
-	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(8))));
+	Material *lampMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(3))));
 	
 	// Lights
 	scene->skyColor = makeColorBlack();
