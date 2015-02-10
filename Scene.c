@@ -453,8 +453,9 @@ void buildCornellCylinderBox(Scene *scene) {
 	
 	
 	// Cylinders
-	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectCylinder(makeSceneObjectCylinder(makeVector(-.3, .4, .3), makeVector(-.3, -1, .3), .3, whiteMaterial)));
-	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectCylinder(makeSceneObjectCylinder(makeVector(.3, -.4, -.3), makeVector(.3, -1, -.3), .3, whiteMaterial)));
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectCylinder(makeSceneObjectCylinder(makeVector(-.2, .4, .3), makeVector(-.3, -.8, .3), .3, whiteMaterial)));
+	sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectCylinder(makeSceneObjectCylinder(makeVector(.4, -.4, -.3), makeVector(.3, -.9, -.3), .3, whiteMaterial)));
+
 
 	
 	
