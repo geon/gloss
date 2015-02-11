@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 #include <SDL.h>
 
 #include "Scene.h"
@@ -39,10 +40,12 @@ int main ( int argc, char** argv )
 			pixels[x + y*WIDTH] = makeColorBlack();
 		}
 	}
+	
+	srand((unsigned int)time(NULL));
 
 	Scene scene = makeScene();
 //	buildRefractionBox(&scene);
-	buildCornellCylinderBox(&scene);
+	buildPhotonRefractionTest(&scene);
 
 	
 

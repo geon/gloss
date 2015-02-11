@@ -31,5 +31,6 @@ void buildCornellBox(Scene *scene);
 void buildPaintBox(Scene *scene);
 void buildRefractionBox(Scene *scene);
 void buildCornellCylinderBox(Scene *scene);
+void buildPhotonRefractionTest(Scene *scene);
 
 #endif // SCENE_H

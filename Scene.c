@@ -488,3 +488,80 @@ void buildCornellCylinderBox(Scene *scene) {
 	)));
 	
 }
+
+
+void buildPhotonRefractionTest(Scene *scene) {
+
+	Material *whiteMaterial  = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(1))));
+	Material *blackMaterial = *materialPointerContainerAddValue(&scene->materials, (Material *) allocateMaterialLamp(makeMaterialLamp(makeColorLightness(0))));
+
+
+	// Plot photon paths.
+
+	Scene simulation = makeScene();
+	Material *glass = *materialPointerContainerAddValue(
+		&scene->materials,
+		(Material *) allocateMaterialTransparent(makeMaterialTransparent(
+			makeColorLightness(scene->standardReflectivity*0), // reflectivity
+			1, // specularity
+			10000, // exponent
+			0, // metallic
+			1, // transparency
+			1.5, // IOR
+			makeColorLightness(0.5) // halfAbsorbDistance
+		))
+	);
+	sceneObjectPointerContainerAddValue(&simulation.objects, (SceneObject *) allocateSceneObjectSphere(makeSceneObjectSphere(makeSphere(makeVectorOrigo(), 1), glass)));
+	sceneObjectPointerContainerAddValue(&simulation.objects, (SceneObject *) allocateSceneObjectUnitPlane(makeSceneObjectUnitPlane(
+		makePlane(makeVector(0, 1, 0), -1+vEpsilon),
+		whiteMaterial
+	)));
+
+	int count = 10;
+	for (int x = 0; x < count; ++x) {
+		for (int z = 0; z < count; ++z) {
+		
+			Photon photon = makePhoton(makeRay(
+				makeVector(
+					-1+2.0*x/(count-1),
+					1,
+					-1+2.0*z/(count-1)
+				),
+				makeVector(0, -1, 0)
+			), makeColorWhite());
+						
+			for(int bounce=0; bounce<10; ++bounce){
+										
+				// Check if the photon hits anyting.
+				Intersection intersection = sceneIntersectRay(simulation, photon.heading);
+				Vector to = intersection.position;
+
+				if(intersection.hitType != surface)
+					to = vAdd(photon.heading.origin, photon.heading.direction);
+					
+				// Generate line.
+				sceneObjectPointerContainerAddValue(&scene->objects, (SceneObject *) allocateSceneObjectCylinder(makeSceneObjectCylinder(
+					photon.heading.origin,
+					to,
+					.01,
+					blackMaterial
+				)));
+
+				if(intersection.hitType != surface)
+					break;
+
+				// Bounce the photon, filtering it by the reflectance.
+				photon = materialSampleBRDF(intersection.material, intersection, photon);
+			}
+		}
+	}
+	
+	
+	
+
+
+	
+	// Camera
+	scene->cameraOrientation = makeMatrixTranslation(makeVector(0, 0, 5));
+	
+}
